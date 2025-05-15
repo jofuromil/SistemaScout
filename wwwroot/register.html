@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro - Sistema Scout</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    form {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 300px;
+    }
+    input, select {
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px;
+      font-size: 16px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Crear cuenta en el Sistema Scout</h1>
+  <form id="registroForm">
+    <input type="text" id="nombre" placeholder="Nombre completo" required />
+    <input type="date" id="fechaNacimiento" required />
+    <input type="text" id="telefono" placeholder="Teléfono" required />
+    <input type="email" id="correo" placeholder="Correo electrónico" required />
+    <input type="password" id="password" placeholder="Contraseña" required />
+    <input type="text" id="ciudad" placeholder="Ciudad" required />
+
+    <select id="tipo" required>
+      <option value="">Seleccione tipo de usuario</option>
+      <option value="Scout">Scout</option>
+      <option value="Dirigente">Dirigente</option>
+    </select>
+
+    <button type="submit">Registrarse</button>
+    <div class="error" id="errorMensaje"></div>
+  </form>
+
+  <script>
+    document.getElementById("registroForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const nombre = document.getElementById("nombre").value;
+      const fechaNacimiento = document.getElementById("fechaNacimiento").value;
+      const telefono = document.getElementById("telefono").value;
+      const correo = document.getElementById("correo").value;
+      const password = document.getElementById("password").value;
+      const ciudad = document.getElementById("ciudad").value;
+      const tipo = document.getElementById("tipo").value;
+      const errorDiv = document.getElementById("errorMensaje");
+
+      try {
+        const response = await fetch("/api/users/registrar", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            nombreCompleto: nombre,
+            fechaNacimiento,
+            telefono,
+            correo,
+            password,
+            ciudad,
+            tipo
+          })
+        });
+
+        if (!response.ok) {
+          const err = await response.json();
+          throw new Error(err.mensaje || "Error en el registro");
+        }
+
+        alert("Registro exitoso. Ya puedes iniciar sesión.");
+        window.location.href = "/login.html";
+      } catch (err) {
+        errorDiv.textContent = err.message;
+      }
+    });
+  </script>
+</body>
+</html>

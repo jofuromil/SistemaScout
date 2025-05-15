@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\SistemaScout\\backendscout\\BackendScout.csproj": {}
+    "D:\\SistemaScout\\BackendScout\\BackendScout.csproj": {}
   },
   "projects": {
-    "D:\\SistemaScout\\backendscout\\BackendScout.csproj": {
+    "D:\\SistemaScout\\BackendScout\\BackendScout.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SistemaScout\\backendscout\\BackendScout.csproj",
+        "projectUniqueName": "D:\\SistemaScout\\BackendScout\\BackendScout.csproj",
         "projectName": "BackendScout",
-        "projectPath": "D:\\SistemaScout\\backendscout\\BackendScout.csproj",
+        "projectPath": "D:\\SistemaScout\\BackendScout\\BackendScout.csproj",
         "packagesPath": "C:\\Users\\JOFURO\\.nuget\\packages\\",
-        "outputPath": "D:\\SistemaScout\\backendscout\\obj\\",
+        "outputPath": "D:\\SistemaScout\\BackendScout\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\JOFURO\\AppData\\Roaming\\NuGet\\NuGet.Config"
