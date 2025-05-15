@@ -25,7 +25,7 @@ builder.Services.AddControllers()
         // Permite (de)serializar enums por su nombre
         opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
-
+builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -103,6 +103,9 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseDefaultFiles(); // Esto busca automáticamente index.html
+app.UseStaticFiles();  // Esto permite servir archivos estáticos como HTML, CSS, JS
+
 app.UseHttpsRedirection(); // app.UseHttpsRedirection();
 
 app.UseAuthentication();   // ✅ primero autenticación

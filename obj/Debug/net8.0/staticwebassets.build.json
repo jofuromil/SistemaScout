@@ -1,0 +1,125 @@
+{
+  "Version": 1,
+  "Hash": "vqzrxTG07QVsq7NzOpdb/TO+/FNXrTc7f7UkmPkwfyM=",
+  "Source": "BackendScout",
+  "BasePath": "_content/BackendScout",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "BackendScout\\wwwroot",
+      "Source": "BackendScout",
+      "ContentRoot": "D:\\SistemaScout\\backendscout\\wwwroot\\",
+      "BasePath": "_content/BackendScout",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\SistemaScout\\backendscout\\wwwroot\\index.html",
+      "SourceId": "BackendScout",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\SistemaScout\\backendscout\\wwwroot\\",
+      "BasePath": "_content/BackendScout",
+      "RelativePath": "index#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "zd46yraca4",
+      "Integrity": "SVapczOPvUehB8eQSAaYESH3vStGvTPcGguHK/BLZg8=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "index.html",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\index.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1070"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"SVapczOPvUehB8eQSAaYESH3vStGvTPcGguHK/BLZg8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 May 2025 00:13:00 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-SVapczOPvUehB8eQSAaYESH3vStGvTPcGguHK/BLZg8="
+        }
+      ]
+    },
+    {
+      "Route": "index.zd46yraca4.html",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\index.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1070"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"SVapczOPvUehB8eQSAaYESH3vStGvTPcGguHK/BLZg8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 May 2025 00:13:00 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "zd46yraca4"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-SVapczOPvUehB8eQSAaYESH3vStGvTPcGguHK/BLZg8="
+        }
+      ]
+    }
+  ]
+}
