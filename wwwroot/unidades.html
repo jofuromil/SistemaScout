@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Unidades - Sistema Scout</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background-color: #f9f9f9;
+    }
+    h2 {
+      text-align: center;
+    }
+    form {
+      margin-top: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+    }
+    select, input[type="text"], button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    .separador {
+      margin: 30px 0;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Gestión de Unidad</h2>
+
+  <div>
+    <h3>Unirse a una unidad existente</h3>
+    <form id="unirseForm">
+      <label for="ramaUnirse">Rama:</label>
+      <select id="ramaUnirse" required>
+        <option value="">Selecciona una rama</option>
+        <option>Lobatos</option>
+        <option>Exploradores</option>
+        <option>Pioneros</option>
+        <option>Rovers</option>
+      </select>
+
+      <label for="unidadId">Código de la unidad:</label>
+      <input type="text" id="unidadId" placeholder="Ej: 123456" required>
+
+      <button type="submit">Unirme</button>
+    </form>
+  </div>
+
+  <div class="separador">o</div>
+
+  <div>
+    <h3>Crear nueva unidad (solo dirigentes)</h3>
+    <form id="crearUnidadForm">
+      <label for="nombre">Nombre de la Unidad:</label>
+      <input type="text" id="nombre" required>
+
+      <label for="rama">Rama:</label>
+      <select id="rama" required>
+        <option value="">Selecciona una rama</option>
+        <option>Lobatos</option>
+        <option>Exploradores</option>
+        <option>Pioneros</option>
+        <option>Rovers</option>
+      </select>
+
+      <label for="distrito">Distrito:</label>
+      <select id="distrito" required>
+        <option value="">Selecciona un distrito</option>
+        <option>La Paz</option>
+        <option>Cochabamba</option>
+        <option>Santa Cruz</option>
+        <option>Oruro</option>
+        <option>Potosí</option>
+        <option>Chuquisaca</option>
+        <option>Tarija</option>
+        <option>Beni</option>
+        <option>Pando</option>
+      </select>
+
+      <label for="grupo">Grupo Scout:</label>
+      <select id="grupo" required>
+        <option value="">Selecciona un grupo</option>
+      </select>
+
+      <button type="submit">Crear Unidad</button>
+    </form>
+  </div>
+
+  <script>
+    const distritoSelect = document.getElementById("distrito");
+    const grupoSelect = document.getElementById("grupo");
+
+    const gruposPorDistrito = {
+      "La Paz": ["Grupo Illimani", "Grupo Sajama"],
+      "Cochabamba": ["Grupo Tunari"],
+      "Santa Cruz": ["Grupo Amboró"],
+      "Oruro": ["Grupo Sajama", "Grupo Sebastián Pagador"],
+      "Potosí": ["Grupo Cerro Rico"],
+      "Chuquisaca": ["Grupo Sucre"],
+      "Tarija": ["Grupo Sama"],
+      "Beni": ["Grupo Mamoré"],
+      "Pando": ["Grupo Manuripi"]
+    };
+
+    distritoSelect.addEventListener("change", function () {
+      const distrito = this.value;
+      grupoSelect.innerHTML = '<option value="">Selecciona un grupo</option>';
+      if (gruposPorDistrito[distrito]) {
+        gruposPorDistrito[distrito].forEach(grupo => {
+          const opt = document.createElement("option");
+          opt.value = grupo;
+          opt.textContent = grupo;
+          grupoSelect.appendChild(opt);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

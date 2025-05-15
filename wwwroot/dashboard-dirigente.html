@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel del Dirigente - Sistema Scout</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background-color: #f2f2f2; }
+    h1 { color: #2c3e50; }
+    .panel { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .section { margin-bottom: 1.5rem; }
+    button { padding: 0.5rem 1rem; margin: 0.3rem; border: none; background-color: #3498db; color: white; border-radius: 5px; cursor: pointer; }
+    button:hover { background-color: #2980b9; }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <h1>🎖️ Panel del Dirigente</h1>
+
+    <div class="section">
+      <h2>Unidad Scout</h2>
+      <button onclick="location.href='unidad.html'">Administrar Unidad</button>
+      <button onclick="location.href='objetivos-validar.html'">Validar Objetivos</button>
+    </div>
+
+    <div class="section">
+      <h2>Eventos</h2>
+      <button onclick="location.href='eventos-organizar.html'">Organizar Evento</button>
+      <button onclick="location.href='eventos-inscritos.html'">Ver Inscritos</button>
+      <button onclick="location.href='eventos-documentos.html'">Documentos y Mensajes</button>
+      <button onclick="location.href='eventos-reportes.html'">Reportes PDF</button>
+    </div>
+
+    <div class="section">
+      <h2>Comunicación</h2>
+      <button onclick="location.href='mensajes-unidad.html'">Mensajes a la Unidad</button>
+      <button onclick="location.href='mensajes-eventos.html'">Mensajes por Evento</button>
+    </div>
+
+    <div class="section">
+      <h2>Cuenta</h2>
+      <button onclick="location.href='login.html'">Cerrar sesión</button>
+    </div>
+  </div>
+</body>
+</html>

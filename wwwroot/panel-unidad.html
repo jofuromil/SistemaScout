@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Unidad - Sistema Scout</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>🎯 Panel de Unidad</h1>
+
+    <p>Bienvenido <strong id="nombreUsuario"></strong> a la unidad <strong id="nombreUnidad"></strong>.</p>
+
+    <div id="acciones">
+        <h2>📚 Opciones Disponibles</h2>
+        <ul id="menuOpciones">
+            <!-- Estas opciones serán cargadas dinámicamente según el rol y la rama -->
+        </ul>
+    </div>
+
+    <script>
+        const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+        if (!usuario || !usuario.token) {
+            window.location.href = "login.html";
+        }
+
+        document.getElementById("nombreUsuario").textContent = usuario.nombreCompleto || "Scout";
+        document.getElementById("nombreUnidad").textContent = usuario.unidadNombre || "(sin unidad)";
+
+        const opciones = [];
+
+        if (usuario.rol === "Dirigente") {
+            opciones.push("Gestionar Unidad", "Objetivos Educativos", "Especialidades", "Eventos", "Mensajes", "Reportes PDF");
+        } else {
+            opciones.push("Mis Objetivos Educativos", "Especialidades", "Inscribirme a Eventos", "Mis Mensajes");
+        }
+
+        const ul = document.getElementById("menuOpciones");
+        opciones.forEach(opcion => {
+            const li = document.createElement("li");
+            const btn = document.createElement("button");
+            btn.textContent = opcion;
+            btn.onclick = () => alert("Opción: " + opcion);
+            li.appendChild(btn);
+            ul.appendChild(li);
+        });
+    </script>
+</body>
+</html>
