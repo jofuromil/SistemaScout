@@ -73,46 +73,48 @@
   </form>
 
   <script>
-    document.getElementById("registroForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
+  document.getElementById("registroForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
 
-      const nombre = document.getElementById("nombre").value;
-      const fechaNacimiento = document.getElementById("fechaNacimiento").value;
-      const telefono = document.getElementById("telefono").value;
-      const correo = document.getElementById("correo").value;
-      const password = document.getElementById("password").value;
-      const ciudad = document.getElementById("ciudad").value;
-      const tipo = document.getElementById("tipo").value;
-      const errorDiv = document.getElementById("errorMensaje");
+    const nombre = document.getElementById("nombre").value;
+    const fechaNacimiento = document.getElementById("fechaNacimiento").value;
+    const telefono = document.getElementById("telefono").value;
+    const correo = document.getElementById("correo").value;
+    const password = document.getElementById("password").value;
+    const ciudad = document.getElementById("ciudad").value;
+    const tipo = document.getElementById("tipo").value;
+    const errorDiv = document.getElementById("errorMensaje");
 
-      try {
-        const response = await fetch("/api/users/registrar", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            nombreCompleto: nombre,
-            fechaNacimiento,
-            telefono,
-            correo,
-            password,
-            ciudad,
-            tipo
-          })
-        });
+    try {
+      const response = await fetch("/api/users/registrar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          nombreCompleto: nombre,
+          fechaNacimiento,
+          telefono,
+          correo,
+          password,
+          ciudad,
+          tipo,
+          rama: "Temporal" // ← necesario para validación
+        })
+      });
 
-        if (!response.ok) {
-          const err = await response.json();
-          throw new Error(err.mensaje || "Error en el registro");
-        }
-
-        alert("Registro exitoso. Ya puedes iniciar sesión.");
-        window.location.href = "/login.html";
-      } catch (err) {
-        errorDiv.textContent = err.message;
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.mensaje || "Error en el registro");
       }
-    });
-  </script>
+
+      alert("Registro exitoso. Ya puedes iniciar sesión.");
+      window.location.href = "/login.html";
+    } catch (err) {
+      errorDiv.textContent = err.message;
+    }
+  });
+</script>
+
 </body>
 </html>
