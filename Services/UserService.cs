@@ -13,36 +13,41 @@ namespace BackendScout.Services
             _context = context;
         }
 
-        public async Task<User> RegistrarUsuario(User nuevo)
+        public async Task<User> RegistrarUsuario(User user)
         {
-            int edad = CalcularEdad(nuevo.FechaNacimiento);
+         int edad = CalcularEdad(user.FechaNacimiento);
 
-            if (nuevo.Tipo == "Scout")
-            {
-                if (edad >= 6 && edad <= 10)
-                    nuevo.Rama = "Lobatos";
-                else if (edad >= 11 && edad <= 14)
-                    nuevo.Rama = "Exploradores";
-                else if (edad >= 15 && edad <= 17)
-                    nuevo.Rama = "Pioneros";
-                else if (edad >= 18 && edad <= 21)
-                    nuevo.Rama = "Rovers";
-                else
-                    nuevo.Rama = "Sin Rama";
-            }
-            else if (nuevo.Tipo == "Dirigente")
-            {
-                if (edad < 18)
-                    throw new Exception("Un dirigente no puede tener menos de 18 años.");
-                nuevo.Rama = "Dirigente";
-            }
+            // Determinar tipo
+            if (edad > 21)
+               user.Tipo = "Dirigente";
+           else
+              user.Tipo = "Scout";
 
-            _context.Users.Add(nuevo);
-            await _context.SaveChangesAsync();
+          // Determinar rama
+           if (user.Tipo == "Scout")
+           {
+               if (edad >= 6 && edad <= 10)
+                  user.Rama = "Lobatos";
+              else if (edad >= 11 && edad <= 14)
+                 user.Rama = "Exploradores";
+             else if (edad >= 15 && edad <= 17)
+                 user.Rama = "Pioneros";
+              else if (edad >= 18 && edad <= 21)
+                  user.Rama = "Rovers";
+              else
+                  user.Rama = "Sin Rama";
+           }
+              else // Dirigente
+          {
+              if (edad < 18)
+                 throw new Exception("Un dirigente no puede tener menos de 18 años.");
+             user.Rama = "Dirigente";
+          }
 
-            return nuevo;
-        }
-
+           _context.Users.Add(user);
+           await _context.SaveChangesAsync();
+            return user;
+    }
         public async Task<List<User>> ObtenerUsuarios()
         {
             return await _context.Users.ToListAsync();

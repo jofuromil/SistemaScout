@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using BackendScout.DTOs;
+
 
 namespace BackendScout.Controllers
 {
@@ -18,12 +20,23 @@ namespace BackendScout.Controllers
             _userService = userService;
         }
 
-        [HttpPost("registrar")]
-        public async Task<ActionResult<User>> RegistrarUsuario([FromBody] User user)
-        {
-            var nuevoUsuario = await _userService.RegistrarUsuario(user);
-            return Ok(nuevoUsuario);
-        }
+         [HttpPost("registrar")]
+ public async Task<ActionResult<User>> RegistrarUsuario([FromBody] RegistroRequest request)
+ {
+      // Mapeamos solo los campos que vienen del cliente
+     var user = new User
+     {
+         NombreCompleto  = request.NombreCompleto,
+         FechaNacimiento = request.FechaNacimiento,
+         Correo          = request.Correo,
+         Password        = request.Password,
+         Telefono        = string.Empty, // se completará luego en ficha personal
+         Ciudad          = string.Empty,
+     };
+
+     var nuevoUsuario = await _userService.RegistrarUsuario(user);
+     return Ok(nuevoUsuario);
+ }
 
         [HttpGet("todos")]
         public async Task<ActionResult<List<User>>> ObtenerTodos()
