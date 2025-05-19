@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY . ./
 RUN dotnet restore
+RUN dotnet ef database update   # <- Ejecutamos aquí las migraciones
 RUN dotnet publish "BackendScout.csproj" -c Release -o /app/publish
 
 # Etapa 2: runtime
@@ -12,9 +13,4 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 EXPOSE 80
-
-# ⬅️ Cambiamos esta línea:
-# ENTRYPOINT ["dotnet", "BackendScout.dll"]
-
-# ⬇️ Por esta:
-ENTRYPOINT ["sh", "-c", "dotnet ef database update && dotnet BackendScout.dll"]
+ENTRYPOINT ["dotnet", "BackendScout.dll"]
