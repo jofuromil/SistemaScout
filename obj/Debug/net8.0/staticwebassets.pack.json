@@ -1,8 +1,36 @@
 {
   "Files": [
     {
+      "Id": "D:\\SistemaScout\\backendscout\\wwwroot\\dashboard-dirigente.html",
+      "PackagePath": "staticwebassets\\dashboard-dirigente.html"
+    },
+    {
+      "Id": "D:\\SistemaScout\\backendscout\\wwwroot\\dashboard-scout.html",
+      "PackagePath": "staticwebassets\\dashboard-scout.html"
+    },
+    {
       "Id": "D:\\SistemaScout\\backendscout\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "D:\\SistemaScout\\backendscout\\wwwroot\\login.html",
+      "PackagePath": "staticwebassets\\login.html"
+    },
+    {
+      "Id": "D:\\SistemaScout\\backendscout\\wwwroot\\login.js",
+      "PackagePath": "staticwebassets\\login.js"
+    },
+    {
+      "Id": "D:\\SistemaScout\\backendscout\\wwwroot\\panel-unidad.html",
+      "PackagePath": "staticwebassets\\panel-unidad.html"
+    },
+    {
+      "Id": "D:\\SistemaScout\\backendscout\\wwwroot\\register.html",
+      "PackagePath": "staticwebassets\\register.html"
+    },
+    {
+      "Id": "D:\\SistemaScout\\backendscout\\wwwroot\\unidades.html",
+      "PackagePath": "staticwebassets\\unidades.html"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.BackendScout.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",

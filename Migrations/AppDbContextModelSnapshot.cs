@@ -53,7 +53,7 @@ namespace BackendScout.Migrations
 
                     b.HasIndex("SubidoPorId");
 
-                    b.ToTable("DocumentosEvento");
+                    b.ToTable("DocumentosEvento", (string)null);
                 });
 
             modelBuilder.Entity("BackendScout.Models.Especialidad", b =>
@@ -75,7 +75,7 @@ namespace BackendScout.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Especialidades");
+                    b.ToTable("Especialidades", (string)null);
                 });
 
             modelBuilder.Entity("BackendScout.Models.FichaMedica", b =>
@@ -151,7 +151,7 @@ namespace BackendScout.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FichasMedicas");
+                    b.ToTable("FichasMedicas", (string)null);
                 });
 
             modelBuilder.Entity("BackendScout.Models.Mensaje", b =>
@@ -179,56 +179,7 @@ namespace BackendScout.Migrations
 
                     b.HasIndex("UnidadId");
 
-                    b.ToTable("Mensajes");
-                });
-
-            modelBuilder.Entity("BackendScout.Models.MensajeEvento", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Contenido")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("EventoId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("FechaEnvio")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("RemitenteId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventoId");
-
-                    b.HasIndex("RemitenteId");
-
-                    b.ToTable("MensajesEvento");
-                });
-
-            modelBuilder.Entity("BackendScout.Models.MensajeEventoDestinatario", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MensajeEventoId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid>("UsuarioId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MensajeEventoId");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("MensajesEventoDestinatarios");
+                    b.ToTable("Mensajes", (string)null);
                 });
 
             modelBuilder.Entity("BackendScout.Models.ObjetivoEducativo", b =>
@@ -261,7 +212,7 @@ namespace BackendScout.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ObjetivosEducativos");
+                    b.ToTable("ObjetivosEducativos", (string)null);
                 });
 
             modelBuilder.Entity("BackendScout.Models.ObjetivoSeleccionado", b =>
@@ -288,7 +239,7 @@ namespace BackendScout.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("ObjetivosSeleccionados");
+                    b.ToTable("ObjetivosSeleccionados", (string)null);
                 });
 
             modelBuilder.Entity("BackendScout.Models.Requisito", b =>
@@ -311,7 +262,7 @@ namespace BackendScout.Migrations
 
                     b.HasIndex("EspecialidadId");
 
-                    b.ToTable("Requisitos");
+                    b.ToTable("Requisitos", (string)null);
                 });
 
             modelBuilder.Entity("BackendScout.Models.Unidad", b =>
@@ -345,7 +296,7 @@ namespace BackendScout.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Unidades");
+                    b.ToTable("Unidades", (string)null);
                 });
 
             modelBuilder.Entity("BackendScout.Models.User", b =>
@@ -390,7 +341,7 @@ namespace BackendScout.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Evento", b =>
@@ -432,7 +383,7 @@ namespace BackendScout.Migrations
                     b.Property<int?>("OrganizadorUnidadId")
                         .HasColumnType("INTEGER");
 
-                    b.PrimitiveCollection<string>("RamasDestino")
+                    b.Property<string>("RamasDestino")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -443,7 +394,7 @@ namespace BackendScout.Migrations
 
                     b.HasIndex("TipoEventoId");
 
-                    b.ToTable("Eventos");
+                    b.ToTable("Eventos", (string)null);
                 });
 
             modelBuilder.Entity("EventoOrganizador", b =>
@@ -464,7 +415,7 @@ namespace BackendScout.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("OrganizadoresEvento");
+                    b.ToTable("OrganizadoresEvento", (string)null);
                 });
 
             modelBuilder.Entity("TipoEvento", b =>
@@ -479,7 +430,7 @@ namespace BackendScout.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TiposEvento");
+                    b.ToTable("TiposEvento", (string)null);
                 });
 
             modelBuilder.Entity("UsuarioEvento", b =>
@@ -514,7 +465,7 @@ namespace BackendScout.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("UsuariosEvento");
+                    b.ToTable("UsuariosEvento", (string)null);
                 });
 
             modelBuilder.Entity("BackendScout.Models.DocumentoEvento", b =>
@@ -553,44 +504,6 @@ namespace BackendScout.Migrations
                     b.Navigation("Dirigente");
 
                     b.Navigation("Unidad");
-                });
-
-            modelBuilder.Entity("BackendScout.Models.MensajeEvento", b =>
-                {
-                    b.HasOne("Evento", "Evento")
-                        .WithMany()
-                        .HasForeignKey("EventoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackendScout.Models.User", "Remitente")
-                        .WithMany()
-                        .HasForeignKey("RemitenteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Evento");
-
-                    b.Navigation("Remitente");
-                });
-
-            modelBuilder.Entity("BackendScout.Models.MensajeEventoDestinatario", b =>
-                {
-                    b.HasOne("BackendScout.Models.MensajeEvento", "MensajeEvento")
-                        .WithMany("Destinatarios")
-                        .HasForeignKey("MensajeEventoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackendScout.Models.User", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MensajeEvento");
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("BackendScout.Models.ObjetivoSeleccionado", b =>
@@ -675,11 +588,6 @@ namespace BackendScout.Migrations
             modelBuilder.Entity("BackendScout.Models.Especialidad", b =>
                 {
                     b.Navigation("Requisitos");
-                });
-
-            modelBuilder.Entity("BackendScout.Models.MensajeEvento", b =>
-                {
-                    b.Navigation("Destinatarios");
                 });
 
             modelBuilder.Entity("Evento", b =>

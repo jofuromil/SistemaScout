@@ -10,21 +10,21 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
 
-
-// ✅ Activar licencias
+// ✅ Activar licencia QuestPDF
 QuestPDF.Settings.License = LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
-var jwtKey = "clave-secreta-super-segura-scout"; // Puedes reemplazarla luego por una más segura
-builder.Configuration["JwtKey"] = jwtKey;
 
-// ✅ Servicios
+// ✅ Clave JWT desde appsettings.json o fija
+var jwtKey = builder.Configuration["Jwt:Key"] ?? "clave-secreta-super-segura-scout";
+
+// ✅ Servicios base
 builder.Services.AddControllers()
     .AddJsonOptions(opts =>
     {
-        // Permite (de)serializar enums por su nombre
         opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -62,7 +62,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-
 // ✅ Servicios personalizados
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<UnidadService>();
@@ -76,23 +75,27 @@ builder.Services.AddScoped<MensajeService>();
 builder.Services.AddScoped<EspecialidadService>();
 builder.Services.AddScoped<EventoService>();
 builder.Services.AddScoped<DocumentoEventoService>();
-
+builder.Services.AddScoped<AuthService>();
 
 // ✅ Base de datos
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=ScoutDB.db"));
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options =>
+
+// ✅ Configuración JWT
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
-                System.Text.Encoding.UTF8.GetBytes(jwtKey)
-            )
+            ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "BackendScout",
+            ValidAudience = builder.Configuration["Jwt:Audience"] ?? "BackendScoutUsuarios",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
     });
 
@@ -103,13 +106,13 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseDefaultFiles(); // Esto busca automáticamente index.html
-app.UseStaticFiles();  // Esto permite servir archivos estáticos como HTML, CSS, JS
 
-app.UseHttpsRedirection(); // app.UseHttpsRedirection();
+app.UseDefaultFiles(); // Sirve index.html automáticamente
+app.UseStaticFiles();  // Habilita archivos estáticos como CSS y JS
 
-app.UseAuthentication();   // ✅ primero autenticación
-app.UseAuthorization();    // ✅ luego autorización
+// ✅ Seguridad
+app.UseAuthentication();   // Debe ir primero
+app.UseAuthorization();    // Luego autorización
 
 app.MapControllers();
 

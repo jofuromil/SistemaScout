@@ -1,11 +1,10 @@
 using BackendScout.Models;
 using BackendScout.Services;
+using BackendScout.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-using BackendScout.DTOs;
-
 
 namespace BackendScout.Controllers
 {
@@ -14,45 +13,49 @@ namespace BackendScout.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UserService _userService;
+        private readonly AuthService _authService;
+        private readonly JwtService _jwtService;
 
-        public UsersController(UserService userService)
+        public UsersController(UserService userService, AuthService authService, JwtService jwtService)
         {
             _userService = userService;
+            _authService = authService;
+            _jwtService = jwtService;
         }
 
-         [HttpPost("registrar")]
- public async Task<ActionResult<User>> RegistrarUsuario([FromBody] RegistroRequest request)
- {
-      // Mapeamos solo los campos que vienen del cliente
-     var user = new User
-     {
-         NombreCompleto  = request.NombreCompleto,
-         FechaNacimiento = request.FechaNacimiento,
-         Correo          = request.Correo,
-         Password        = request.Password,
-         Telefono        = string.Empty, // se completará luego en ficha personal
-         Ciudad          = string.Empty,
-     };
-
-     var nuevoUsuario = await _userService.RegistrarUsuario(user);
-     return Ok(nuevoUsuario);
- }
-
-        [HttpGet("todos")]
-        public async Task<ActionResult<List<User>>> ObtenerTodos()
+        [HttpPost("registrar")]
+        public async Task<ActionResult> RegistrarUsuario([FromBody] RegistroRequest request)
         {
-            var usuarios = await _userService.ObtenerUsuarios();
-            return Ok(usuarios);
+            if (_userService.ObtenerUsuarioPorCorreo(request.Correo) != null)
+                return BadRequest(new { mensaje = "Ya existe un usuario con ese correo." });
+
+            var user = new User
+            {
+                NombreCompleto = request.NombreCompleto,
+                FechaNacimiento = request.FechaNacimiento,
+                Correo = request.Correo,
+                Password = _authService.HashPassword(request.Password),
+                Telefono = string.Empty,
+                Ciudad = string.Empty,
+                Tipo = "Scout", // valor por defecto
+                Rama = string.Empty,
+                UnidadId = null
+            };
+
+            var nuevoUsuario = await _userService.RegistrarUsuario(user);
+            var token = _authService.GenerateJwtToken(nuevoUsuario);
+
+            return Ok(new { token });
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request, [FromServices] JwtService jwtService)
+        public async Task<IActionResult> Login([FromBody] LoginUserDto dto)
         {
-            var user = await _userService.ValidarLogin(request.Email, request.Password);
-            if (user == null)
+            var user = await _userService.ValidarLogin(dto.Correo, dto.Password);
+            if (user == null || !_authService.VerifyPassword(dto.Password, user.Password))
                 return Unauthorized(new { mensaje = "Credenciales inválidas" });
 
-            var token = jwtService.GenerarToken(user);
+            var token = _authService.GenerateJwtToken(user);
 
             return Ok(new
             {
@@ -65,6 +68,13 @@ namespace BackendScout.Controllers
                     user.Rama
                 }
             });
+        }
+
+        [HttpGet("todos")]
+        public async Task<ActionResult<List<User>>> ObtenerTodos()
+        {
+            var usuarios = await _userService.ObtenerUsuarios();
+            return Ok(usuarios);
         }
 
         [HttpPost("unirse-a-unidad")]

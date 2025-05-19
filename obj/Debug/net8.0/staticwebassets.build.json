@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "vqzrxTG07QVsq7NzOpdb/TO+/FNXrTc7f7UkmPkwfyM=",
+  "Hash": "Tny6xviStz+4q1J17og9jO6Eu0LpZjsU4Un5bA0I2Mo=",
   "Source": "BackendScout",
   "BasePath": "_content/BackendScout",
   "Mode": "Default",
@@ -17,6 +17,48 @@
   ],
   "Assets": [
     {
+      "Identity": "D:\\SistemaScout\\backendscout\\wwwroot\\dashboard-dirigente.html",
+      "SourceId": "BackendScout",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\SistemaScout\\backendscout\\wwwroot\\",
+      "BasePath": "_content/BackendScout",
+      "RelativePath": "dashboard-dirigente#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "malbyj4vvu",
+      "Integrity": "cjGpcJfGYG7er22nHlGVY03u7Q5J6ofn5V5HxeeaMs4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\dashboard-dirigente.html"
+    },
+    {
+      "Identity": "D:\\SistemaScout\\backendscout\\wwwroot\\dashboard-scout.html",
+      "SourceId": "BackendScout",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\SistemaScout\\backendscout\\wwwroot\\",
+      "BasePath": "_content/BackendScout",
+      "RelativePath": "dashboard-scout#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "vd1ng4n8pz",
+      "Integrity": "w3bGqbnsGSUCD52Jd5BaqPLqvQvuGqzIstu5uL8v1Pg=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\dashboard-scout.html"
+    },
+    {
       "Identity": "D:\\SistemaScout\\backendscout\\wwwroot\\index.html",
       "SourceId": "BackendScout",
       "SourceType": "Discovered",
@@ -31,14 +73,328 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "zd46yraca4",
-      "Integrity": "SVapczOPvUehB8eQSAaYESH3vStGvTPcGguHK/BLZg8=",
+      "Fingerprint": "9uljgtk2zq",
+      "Integrity": "r6Zea6/fWNjdbDAZFfLtX/7JiFdrDYv2W9EjXCU0EZ0=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\index.html"
+    },
+    {
+      "Identity": "D:\\SistemaScout\\backendscout\\wwwroot\\login.html",
+      "SourceId": "BackendScout",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\SistemaScout\\backendscout\\wwwroot\\",
+      "BasePath": "_content/BackendScout",
+      "RelativePath": "login#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "bfwuabbxtx",
+      "Integrity": "p0UIlw30chpHi2Fwikd6rLCiPx67s1P9MegG9DHmPQc=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\login.html"
+    },
+    {
+      "Identity": "D:\\SistemaScout\\backendscout\\wwwroot\\login.js",
+      "SourceId": "BackendScout",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\SistemaScout\\backendscout\\wwwroot\\",
+      "BasePath": "_content/BackendScout",
+      "RelativePath": "login#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "xcahzo5c69",
+      "Integrity": "sQHN674qFTInQ8ItujH/x2ypQf+mh3cuckica3o2WyA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\login.js"
+    },
+    {
+      "Identity": "D:\\SistemaScout\\backendscout\\wwwroot\\panel-unidad.html",
+      "SourceId": "BackendScout",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\SistemaScout\\backendscout\\wwwroot\\",
+      "BasePath": "_content/BackendScout",
+      "RelativePath": "panel-unidad#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "7ke83t8zu4",
+      "Integrity": "t7IwVIgOnrh1L8ucLtM1T5p/VUMjCXvr3f8aswL2O1I=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\panel-unidad.html"
+    },
+    {
+      "Identity": "D:\\SistemaScout\\backendscout\\wwwroot\\register.html",
+      "SourceId": "BackendScout",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\SistemaScout\\backendscout\\wwwroot\\",
+      "BasePath": "_content/BackendScout",
+      "RelativePath": "register#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "mlv17flzdp",
+      "Integrity": "OmmEoRWBy6YlQJLEi71uRZaM0sdrMDt9jefWJPkIanI=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\register.html"
+    },
+    {
+      "Identity": "D:\\SistemaScout\\backendscout\\wwwroot\\unidades.html",
+      "SourceId": "BackendScout",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\SistemaScout\\backendscout\\wwwroot\\",
+      "BasePath": "_content/BackendScout",
+      "RelativePath": "unidades#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "u5siv0fwrr",
+      "Integrity": "7jEHc7uyu8P/DqmDZ6xVO3I2rKqfbHLMRaJOppHsXl0=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\unidades.html"
     }
   ],
   "Endpoints": [
+    {
+      "Route": "dashboard-dirigente.html",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\dashboard-dirigente.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1845"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"cjGpcJfGYG7er22nHlGVY03u7Q5J6ofn5V5HxeeaMs4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 May 2025 01:28:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-cjGpcJfGYG7er22nHlGVY03u7Q5J6ofn5V5HxeeaMs4="
+        }
+      ]
+    },
+    {
+      "Route": "dashboard-dirigente.malbyj4vvu.html",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\dashboard-dirigente.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1845"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"cjGpcJfGYG7er22nHlGVY03u7Q5J6ofn5V5HxeeaMs4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 May 2025 01:28:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "malbyj4vvu"
+        },
+        {
+          "Name": "label",
+          "Value": "dashboard-dirigente.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-cjGpcJfGYG7er22nHlGVY03u7Q5J6ofn5V5HxeeaMs4="
+        }
+      ]
+    },
+    {
+      "Route": "dashboard-scout.html",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\dashboard-scout.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1551"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"w3bGqbnsGSUCD52Jd5BaqPLqvQvuGqzIstu5uL8v1Pg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 May 2025 01:30:15 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-w3bGqbnsGSUCD52Jd5BaqPLqvQvuGqzIstu5uL8v1Pg="
+        }
+      ]
+    },
+    {
+      "Route": "dashboard-scout.vd1ng4n8pz.html",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\dashboard-scout.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1551"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"w3bGqbnsGSUCD52Jd5BaqPLqvQvuGqzIstu5uL8v1Pg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 May 2025 01:30:15 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "vd1ng4n8pz"
+        },
+        {
+          "Name": "label",
+          "Value": "dashboard-scout.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-w3bGqbnsGSUCD52Jd5BaqPLqvQvuGqzIstu5uL8v1Pg="
+        }
+      ]
+    },
+    {
+      "Route": "index.9uljgtk2zq.html",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\index.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1229"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"r6Zea6/fWNjdbDAZFfLtX/7JiFdrDYv2W9EjXCU0EZ0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 May 2025 13:09:23 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "9uljgtk2zq"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-r6Zea6/fWNjdbDAZFfLtX/7JiFdrDYv2W9EjXCU0EZ0="
+        }
+      ]
+    },
     {
       "Route": "index.html",
       "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\index.html",
@@ -50,7 +406,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1070"
+          "Value": "1229"
         },
         {
           "Name": "Content-Type",
@@ -58,11 +414,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"SVapczOPvUehB8eQSAaYESH3vStGvTPcGguHK/BLZg8=\""
+          "Value": "\"r6Zea6/fWNjdbDAZFfLtX/7JiFdrDYv2W9EjXCU0EZ0=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 15 May 2025 00:13:00 GMT"
+          "Value": "Thu, 15 May 2025 13:09:23 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -72,13 +428,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-SVapczOPvUehB8eQSAaYESH3vStGvTPcGguHK/BLZg8="
+          "Value": "sha256-r6Zea6/fWNjdbDAZFfLtX/7JiFdrDYv2W9EjXCU0EZ0="
         }
       ]
     },
     {
-      "Route": "index.zd46yraca4.html",
-      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\index.html",
+      "Route": "login.bfwuabbxtx.html",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\login.html",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -87,7 +443,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1070"
+          "Value": "3056"
         },
         {
           "Name": "Content-Type",
@@ -95,11 +451,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"SVapczOPvUehB8eQSAaYESH3vStGvTPcGguHK/BLZg8=\""
+          "Value": "\"p0UIlw30chpHi2Fwikd6rLCiPx67s1P9MegG9DHmPQc=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 15 May 2025 00:13:00 GMT"
+          "Value": "Thu, 15 May 2025 01:11:55 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -109,15 +465,380 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "zd46yraca4"
+          "Value": "bfwuabbxtx"
         },
         {
           "Name": "label",
-          "Value": "index.html"
+          "Value": "login.html"
         },
         {
           "Name": "integrity",
-          "Value": "sha256-SVapczOPvUehB8eQSAaYESH3vStGvTPcGguHK/BLZg8="
+          "Value": "sha256-p0UIlw30chpHi2Fwikd6rLCiPx67s1P9MegG9DHmPQc="
+        }
+      ]
+    },
+    {
+      "Route": "login.html",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\login.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3056"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"p0UIlw30chpHi2Fwikd6rLCiPx67s1P9MegG9DHmPQc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 May 2025 01:11:55 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-p0UIlw30chpHi2Fwikd6rLCiPx67s1P9MegG9DHmPQc="
+        }
+      ]
+    },
+    {
+      "Route": "login.js",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\login.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1422"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"sQHN674qFTInQ8ItujH/x2ypQf+mh3cuckica3o2WyA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 May 2025 01:38:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-sQHN674qFTInQ8ItujH/x2ypQf+mh3cuckica3o2WyA="
+        }
+      ]
+    },
+    {
+      "Route": "login.xcahzo5c69.js",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\login.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1422"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"sQHN674qFTInQ8ItujH/x2ypQf+mh3cuckica3o2WyA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 May 2025 01:38:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "xcahzo5c69"
+        },
+        {
+          "Name": "label",
+          "Value": "login.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-sQHN674qFTInQ8ItujH/x2ypQf+mh3cuckica3o2WyA="
+        }
+      ]
+    },
+    {
+      "Route": "panel-unidad.7ke83t8zu4.html",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\panel-unidad.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1806"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"t7IwVIgOnrh1L8ucLtM1T5p/VUMjCXvr3f8aswL2O1I=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 May 2025 01:21:31 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "7ke83t8zu4"
+        },
+        {
+          "Name": "label",
+          "Value": "panel-unidad.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-t7IwVIgOnrh1L8ucLtM1T5p/VUMjCXvr3f8aswL2O1I="
+        }
+      ]
+    },
+    {
+      "Route": "panel-unidad.html",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\panel-unidad.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1806"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"t7IwVIgOnrh1L8ucLtM1T5p/VUMjCXvr3f8aswL2O1I=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 May 2025 01:21:31 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-t7IwVIgOnrh1L8ucLtM1T5p/VUMjCXvr3f8aswL2O1I="
+        }
+      ]
+    },
+    {
+      "Route": "register.html",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\register.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2893"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"OmmEoRWBy6YlQJLEi71uRZaM0sdrMDt9jefWJPkIanI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 May 2025 21:45:04 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-OmmEoRWBy6YlQJLEi71uRZaM0sdrMDt9jefWJPkIanI="
+        }
+      ]
+    },
+    {
+      "Route": "register.mlv17flzdp.html",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\register.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2893"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"OmmEoRWBy6YlQJLEi71uRZaM0sdrMDt9jefWJPkIanI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 May 2025 21:45:04 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "mlv17flzdp"
+        },
+        {
+          "Name": "label",
+          "Value": "register.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-OmmEoRWBy6YlQJLEi71uRZaM0sdrMDt9jefWJPkIanI="
+        }
+      ]
+    },
+    {
+      "Route": "unidades.html",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\unidades.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3754"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"7jEHc7uyu8P/DqmDZ6xVO3I2rKqfbHLMRaJOppHsXl0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 May 2025 01:15:03 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-7jEHc7uyu8P/DqmDZ6xVO3I2rKqfbHLMRaJOppHsXl0="
+        }
+      ]
+    },
+    {
+      "Route": "unidades.u5siv0fwrr.html",
+      "AssetFile": "D:\\SistemaScout\\backendscout\\wwwroot\\unidades.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3754"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"7jEHc7uyu8P/DqmDZ6xVO3I2rKqfbHLMRaJOppHsXl0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 15 May 2025 01:15:03 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "u5siv0fwrr"
+        },
+        {
+          "Name": "label",
+          "Value": "unidades.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-7jEHc7uyu8P/DqmDZ6xVO3I2rKqfbHLMRaJOppHsXl0="
         }
       ]
     }

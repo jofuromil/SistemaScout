@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\SistemaScout\\BackendScout\\BackendScout.csproj": {}
+    "D:\\SistemaScout\\backendscout\\BackendScout.csproj": {}
   },
   "projects": {
-    "D:\\SistemaScout\\BackendScout\\BackendScout.csproj": {
+    "D:\\SistemaScout\\backendscout\\BackendScout.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SistemaScout\\BackendScout\\BackendScout.csproj",
+        "projectUniqueName": "D:\\SistemaScout\\backendscout\\BackendScout.csproj",
         "projectName": "BackendScout",
-        "projectPath": "D:\\SistemaScout\\BackendScout\\BackendScout.csproj",
+        "projectPath": "D:\\SistemaScout\\backendscout\\BackendScout.csproj",
         "packagesPath": "C:\\Users\\JOFURO\\.nuget\\packages\\",
-        "outputPath": "D:\\SistemaScout\\BackendScout\\obj\\",
+        "outputPath": "D:\\SistemaScout\\backendscout\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\JOFURO\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -44,6 +44,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
             "ClosedXML": {
               "target": "Package",
               "version": "[0.104.2, )"

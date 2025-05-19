@@ -1,6 +1,7 @@
 using BackendScout.Data;
 using BackendScout.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace BackendScout.Services
 {
@@ -12,42 +13,51 @@ namespace BackendScout.Services
         {
             _context = context;
         }
+        public User? ObtenerUsuarioPorCorreo(string correo)
+        {
+        return _context.Users.FirstOrDefault(u => u.Correo == correo);
+        }
 
         public async Task<User> RegistrarUsuario(User user)
         {
-         int edad = CalcularEdad(user.FechaNacimiento);
+            int edad = CalcularEdad(user.FechaNacimiento);
 
             // Determinar tipo
             if (edad > 21)
-               user.Tipo = "Dirigente";
-           else
-              user.Tipo = "Scout";
+                user.Tipo = "Dirigente";
+            else
+                user.Tipo = "Scout";
 
-          // Determinar rama
-           if (user.Tipo == "Scout")
-           {
-               if (edad >= 6 && edad <= 10)
-                  user.Rama = "Lobatos";
-              else if (edad >= 11 && edad <= 14)
-                 user.Rama = "Exploradores";
-             else if (edad >= 15 && edad <= 17)
-                 user.Rama = "Pioneros";
-              else if (edad >= 18 && edad <= 21)
-                  user.Rama = "Rovers";
-              else
-                  user.Rama = "Sin Rama";
-           }
-              else // Dirigente
-          {
-              if (edad < 18)
-                 throw new Exception("Un dirigente no puede tener menos de 18 años.");
-             user.Rama = "Dirigente";
-          }
+            // Determinar rama
+            if (user.Tipo == "Scout")
+            {
+                if (edad >= 6 && edad <= 10)
+                    user.Rama = "Lobatos";
+                else if (edad >= 11 && edad <= 14)
+                    user.Rama = "Exploradores";
+                else if (edad >= 15 && edad <= 17)
+                    user.Rama = "Pioneros";
+                else if (edad >= 18 && edad <= 21)
+                    user.Rama = "Rovers";
+                else
+                    user.Rama = "Sin Rama";
+            }
+            else // Dirigente
+            {
+                if (edad < 18)
+                    throw new Exception("Un dirigente no puede tener menos de 18 años.");
+                user.Rama = "Dirigente";
+            }
 
-           _context.Users.Add(user);
-           await _context.SaveChangesAsync();
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
             return user;
-    }
+        }
+        public bool ExisteUsuario(string correo)
+        {
+            return _context.Users.Any(u => u.Correo == correo);
+        }
+
         public async Task<List<User>> ObtenerUsuarios()
         {
             return await _context.Users.ToListAsync();
@@ -55,7 +65,7 @@ namespace BackendScout.Services
 
         public async Task<User?> ValidarLogin(string email, string password)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Correo == email && u.Password == password);
+        return await _context.Users.FirstOrDefaultAsync(u => u.Correo == email);
         }
         
         private int CalcularEdad(DateTime fechaNacimiento)

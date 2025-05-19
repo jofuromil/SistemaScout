@@ -90,7 +90,7 @@
 
         if (!response.ok) {
           const err = await response.json();
-          throw new Error(err.title || "Error en el registro");
+          throw new Error(err.mensaje || "Error en el registro");
         }
 
         alert("Registro exitoso. Ya puedes iniciar sesión.");
