@@ -4,12 +4,15 @@ WORKDIR /app
 
 COPY . ./
 
-# ✅ Instalar la herramienta EF
+# Instalar EF
 RUN dotnet tool install --global dotnet-ef
 ENV PATH="$PATH:/root/.dotnet/tools"
 
 RUN dotnet restore
-RUN dotnet ef database update
+
+# ✅ Ejecutar migraciones con parámetros explícitos
+RUN dotnet ef database update --project BackendScout.csproj --startup-project BackendScout.csproj --context AppDbContext
+
 RUN dotnet publish "BackendScout.csproj" -c Release -o /app/publish
 
 # Etapa 2: runtime
