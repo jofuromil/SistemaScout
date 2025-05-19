@@ -3,8 +3,13 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 COPY . ./
+
+# ✅ Instalar la herramienta EF
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="$PATH:/root/.dotnet/tools"
+
 RUN dotnet restore
-RUN dotnet ef database update   # <- Ejecutamos aquí las migraciones
+RUN dotnet ef database update
 RUN dotnet publish "BackendScout.csproj" -c Release -o /app/publish
 
 # Etapa 2: runtime
