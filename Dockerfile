@@ -12,4 +12,9 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 EXPOSE 80
-ENTRYPOINT ["dotnet", "BackendScout.dll"]
+
+# ⬅️ Cambiamos esta línea:
+# ENTRYPOINT ["dotnet", "BackendScout.dll"]
+
+# ⬇️ Por esta:
+ENTRYPOINT ["sh", "-c", "dotnet ef database update && dotnet BackendScout.dll"]
