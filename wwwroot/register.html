@@ -90,12 +90,12 @@
 
   if (!response.ok) {
     let errorMessage = "Error en el registro.";
+    let err;
     try {
-      const err = await response.json();
+      err = await response.clone().json(); // <- .clone() permite leer de nuevo el body
       errorMessage = err.mensaje || errorMessage;
     } catch {
-      const errText = await response.text();
-      console.error("Respuesta no JSON:", errText);
+      // Si no es JSON, no hacemos nada
     }
     throw new Error(errorMessage);
   }
