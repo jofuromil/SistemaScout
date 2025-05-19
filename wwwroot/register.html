@@ -75,29 +75,38 @@
       const errorDiv = document.getElementById("errorMensaje");
 
       try {
-        const response = await fetch("/api/users/registrar", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            nombreCompleto: nombre,
-            fechaNacimiento,
-            correo,
-            password
-          })
-        });
+  const response = await fetch("/api/users/registrar", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      nombreCompleto: nombre,
+      fechaNacimiento,
+      correo,
+      password
+    })
+  });
 
-        if (!response.ok) {
-          const err = await response.json();
-          throw new Error(err.mensaje || "Error en el registro");
-        }
+  if (!response.ok) {
+    let errorMessage = "Error en el registro.";
+    try {
+      const err = await response.json();
+      errorMessage = err.mensaje || errorMessage;
+    } catch {
+      const errText = await response.text();
+      console.error("Respuesta no JSON:", errText);
+    }
+    throw new Error(errorMessage);
+  }
 
-        alert("Registro exitoso. Ya puedes iniciar sesión.");
-        window.location.href = "/login.html";
-      } catch (err) {
-        errorDiv.textContent = err.message;
-      }
+  alert("Registro exitoso. Ya puedes iniciar sesión.");
+  window.location.href = "/login.html";
+
+} catch (err) {
+  errorDiv.textContent = err.message;
+}
+
     });
   </script>
 </body>
