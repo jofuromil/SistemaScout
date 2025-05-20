@@ -1,5 +1,6 @@
 using BackendScout.Models;
 using BackendScout.Services;
+using BackendScout.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
@@ -37,6 +38,11 @@ namespace BackendScout.Controllers
             var unidades = await _unidadService.ObtenerUnidades();
             return Ok(unidades);
         }
+
+        [HttpGet("grupos-por-distrito")]
+        public IActionResult ObtenerGruposPorDistrito()
+        {
+            return Ok(GruposPorDistrito.Grupos);
+        }
     }
 }
-
