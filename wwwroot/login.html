@@ -54,8 +54,8 @@
 <body>
   <h1>Ingreso al Sistema Scout</h1>
   <form id="loginForm">
-    <input type="email" id="correo" placeholder="Correo electrónico" required />
-    <input type="password" id="password" placeholder="Contraseña" required />
+    <input type="text" id="usuario" placeholder="Correo electrónico" required />
+    <input type="password" id="clave" placeholder="Contraseña" required />
     <button type="submit">Ingresar</button>
     <div class="error" id="errorMensaje"></div>
   </form>
@@ -64,8 +64,8 @@
     document.getElementById("loginForm").addEventListener("submit", async function(e) {
       e.preventDefault();
 
-      const correo = document.getElementById("correo").value;
-      const password = document.getElementById("password").value;
+      const correo = document.getElementById("usuario").value;
+      const password = document.getElementById("clave").value;
       const errorDiv = document.getElementById("errorMensaje");
 
       try {
@@ -84,17 +84,17 @@
 
         const data = await respuesta.json();
 
-        // Guardar token y datos del usuario
+        // Guardar datos en localStorage
         localStorage.setItem("token", data.token);
         localStorage.setItem("usuarioId", data.user.id);
         localStorage.setItem("tipo", data.user.tipo);
         localStorage.setItem("rama", data.user.rama);
+        localStorage.setItem("unidadId", data.user.unidadId || "");
 
-        // Redirigir según tipo de usuario o si no tiene unidad
-        // Asumimos que unidad es null si no tiene
+        // Redirigir según tipo y si tiene unidad
         if (!data.user.unidadId) {
           window.location.href = "/unidades.html";
-        } else if (data.user.tipo === "Dirigente") {
+        } else if (data.user.tipo.toLowerCase() === "dirigente") {
           window.location.href = "/dashboard-dirigente.html";
         } else {
           window.location.href = "/dashboard-scout.html";
@@ -107,3 +107,4 @@
   </script>
 </body>
 </html>
+

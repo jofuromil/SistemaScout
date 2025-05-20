@@ -79,7 +79,8 @@ if (!_authService.VerifyPassword(dto.Password, user.Password))
                     user.Id,
                     user.NombreCompleto,
                     user.Tipo,
-                    user.Rama
+                    user.Rama,
+                    unidadId = user.UnidadId
                 }
             });
         }
