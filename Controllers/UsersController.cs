@@ -52,8 +52,22 @@ namespace BackendScout.Controllers
         public async Task<IActionResult> Login([FromBody] LoginUserDto dto)
         {
             var user = await _userService.ValidarLogin(dto.Correo, dto.Password);
-            if (user == null || !_authService.VerifyPassword(dto.Password, user.Password))
-                return Unauthorized(new { mensaje = "Credenciales inválidas" });
+            if (user == null)
+    return Unauthorized(new { mensaje = "El correo no está registrado." });
+
+if (!_authService.VerifyPassword(dto.Password, user.Password))
+{
+    // Validación adicional para detectar contraseñas antiguas no hasheadas
+    if (!user.Password.StartsWith("$2"))
+    {
+        return Unauthorized(new
+        {
+            mensaje = "Tu cuenta fue creada antes de una actualización del sistema. Por favor, crea una nueva cuenta."
+        });
+    }
+
+    return Unauthorized(new { mensaje = "Contraseña incorrecta." });
+}
 
             var token = _authService.GenerateJwtToken(user);
 
