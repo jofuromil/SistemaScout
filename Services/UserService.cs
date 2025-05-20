@@ -57,6 +57,13 @@ namespace BackendScout.Services
         {
             return _context.Users.Any(u => u.Correo == correo);
         }
+        public async Task<User?> ObtenerPorIdConUnidad(Guid id)
+{
+    return await _context.Users
+        .Include(u => u.Unidad)
+        .FirstOrDefaultAsync(u => u.Id == id);
+}
+
 
         public async Task<List<User>> ObtenerUsuarios()
         {

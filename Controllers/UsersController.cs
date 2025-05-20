@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace BackendScout.Controllers
 {
@@ -84,6 +86,29 @@ if (!_authService.VerifyPassword(dto.Password, user.Password))
                 }
             });
         }
+        [HttpGet("me")]
+[Authorize]
+public async Task<IActionResult> ObtenerDatosPropios()
+{
+    var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+    var usuario = await _userService.ObtenerPorIdConUnidad(Guid.Parse(userId));
+
+    if (usuario == null)
+        return NotFound();
+
+    return Ok(new
+    {
+        usuario.Id,
+        usuario.NombreCompleto,
+        usuario.Tipo,
+        usuario.Rama,
+        unidad = usuario.Unidad != null ? new
+        {
+            usuario.Unidad.Id,
+            usuario.Unidad.CodigoUnidad
+        } : null
+    });
+}
 
         [HttpGet("todos")]
         public async Task<ActionResult<List<User>>> ObtenerTodos()
