@@ -176,10 +176,11 @@
   // Crear unidad (solo dirigente)
   document.getElementById("crearUnidadForm").addEventListener("submit", async function (e) {
     e.preventDefault();
-    if (tipo !== "Dirigente") {
-      alert("Solo los dirigentes pueden crear unidades.");
-      return;
-    }
+    if ((tipo || "").toLowerCase() !== "dirigente") {
+  alert("Solo los dirigentes pueden crear unidades.");
+  return;
+}
+
 
     const nombre = document.getElementById("nombre").value;
     const rama = document.getElementById("rama").value;
