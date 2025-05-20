@@ -74,6 +74,12 @@
       const password = document.getElementById("password").value;
       const errorDiv = document.getElementById("errorMensaje");
 
+      // Validar contraseña segura
+  if (password.length < 6) {
+    errorDiv.textContent = "La contraseña debe tener al menos 6 caracteres.";
+    return;
+  }
+
       try {
   const response = await fetch("/api/users/registrar", {
     method: "POST",
