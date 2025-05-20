@@ -100,33 +100,116 @@
   </div>
 
   <script>
-    const distritoSelect = document.getElementById("distrito");
-    const grupoSelect = document.getElementById("grupo");
+  const distritoSelect = document.getElementById("distrito");
+  const grupoSelect = document.getElementById("grupo");
+  const token = localStorage.getItem("token");
+  const usuarioId = localStorage.getItem("usuarioId");
+  const tipo = localStorage.getItem("tipo");
+  let gruposOficiales = {};
 
-    const gruposPorDistrito = {
-      "La Paz": ["Grupo Illimani", "Grupo Sajama"],
-      "Cochabamba": ["Grupo Tunari"],
-      "Santa Cruz": ["Grupo Amboró"],
-      "Oruro": ["Grupo Sajama", "Grupo Sebastián Pagador"],
-      "Potosí": ["Grupo Cerro Rico"],
-      "Chuquisaca": ["Grupo Sucre"],
-      "Tarija": ["Grupo Sama"],
-      "Beni": ["Grupo Mamoré"],
-      "Pando": ["Grupo Manuripi"]
-    };
+  if (!token || !usuarioId) {
+    window.location.href = "/login.html";
+  }
 
-    distritoSelect.addEventListener("change", function () {
-      const distrito = this.value;
-      grupoSelect.innerHTML = '<option value="">Selecciona un grupo</option>';
-      if (gruposPorDistrito[distrito]) {
-        gruposPorDistrito[distrito].forEach(grupo => {
-          const opt = document.createElement("option");
-          opt.value = grupo;
-          opt.textContent = grupo;
-          grupoSelect.appendChild(opt);
-        });
+  // Cargar lista oficial desde el backend
+  async function cargarGruposPorDistrito() {
+    try {
+      const response = await fetch("/api/unidades/grupos-por-distrito");
+      if (!response.ok) throw new Error("No se pudo cargar la lista oficial");
+      gruposOficiales = await response.json();
+
+      // Llenar el select de distritos
+      const distritos = Object.keys(gruposOficiales);
+      distritoSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
+      distritos.forEach(d => {
+        const opt = document.createElement("option");
+        opt.value = d;
+        opt.textContent = d;
+        distritoSelect.appendChild(opt);
+      });
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  // Cargar grupos cuando cambia distrito
+  distritoSelect.addEventListener("change", function () {
+    const distrito = this.value;
+    grupoSelect.innerHTML = '<option value="">Selecciona un grupo</option>';
+    if (gruposOficiales[distrito]) {
+      gruposOficiales[distrito].forEach(grupo => {
+        const opt = document.createElement("option");
+        opt.value = grupo;
+        opt.textContent = grupo;
+        grupoSelect.appendChild(opt);
+      });
+    }
+  });
+
+  // Unirse a unidad existente
+  document.getElementById("unirseForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const codigoUnidad = document.getElementById("unidadId").value;
+
+    try {
+      const response = await fetch("/api/users/unirse-a-unidad", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ usuarioId, codigoUnidad })
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.mensaje || "Error al unirse.");
       }
-    });
-  </script>
+
+      if (tipo === "Dirigente") {
+        window.location.href = "/dashboard-dirigente.html";
+      } else {
+        window.location.href = "/dashboard-scout.html";
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  });
+
+  // Crear unidad (solo dirigente)
+  document.getElementById("crearUnidadForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    if (tipo !== "Dirigente") {
+      alert("Solo los dirigentes pueden crear unidades.");
+      return;
+    }
+
+    const nombre = document.getElementById("nombre").value;
+    const rama = document.getElementById("rama").value;
+    const distrito = document.getElementById("distrito").value;
+    const grupo = document.getElementById("grupo").value;
+
+    try {
+      const response = await fetch("/api/unidades", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ nombre, rama, distrito, grupoScout: grupo, dirigenteId: usuarioId })
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.mensaje || "Error al crear unidad.");
+      }
+
+      window.location.href = "/dashboard-dirigente.html";
+    } catch (error) {
+      alert(error.message);
+    }
+  });
+
+  // Iniciar carga
+  cargarGruposPorDistrito();
+</script>
+
 </body>
 </html>
