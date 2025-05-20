@@ -59,6 +59,12 @@
     <input type="date" id="fechaNacimiento" required />
     <input type="email" id="correo" placeholder="Correo electrónico" required />
     <input type="password" id="password" placeholder="Contraseña" required />
+    <label for="tipo">Tipo de usuario:</label>
+    <select id="tipo" required>
+      <option value="">Selecciona un tipo</option>
+      <option value="Scout">Scout</option>
+      <option value="Dirigente">Dirigente</option>
+      </select>
 
     <button type="submit">Registrarse</button>
     <div class="error" id="errorMensaje"></div>
@@ -73,6 +79,7 @@
       const correo = document.getElementById("correo").value;
       const password = document.getElementById("password").value;
       const errorDiv = document.getElementById("errorMensaje");
+      const tipo = document.getElementById("tipo").value;
 
       // Validar contraseña segura
   if (password.length < 6) {
@@ -90,7 +97,8 @@
       nombreCompleto: nombre,
       fechaNacimiento,
       correo,
-      password
+      password,
+      tipo
     })
   });
 
