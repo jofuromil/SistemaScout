@@ -188,7 +188,7 @@
     const grupo = document.getElementById("grupo").value;
 
     try {
-      const response = await fetch("/api/unidades", {
+      const response = await fetch("/api/unidades/crear", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
