@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seleccionar Objetivos - Scout</title>
+  <style>
+    body { font-family: sans-serif; background: #f4f4f4; padding: 20px; }
+    h1 { color: #2c3e50; }
+    .objetivo { background: white; margin: 10px 0; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .objetivo h3 { margin: 0; }
+    button { padding: 8px 12px; background-color: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background-color: #1e8449; }
+    .mensaje { margin-top: 20px; color: green; }
+  </style>
+</head>
+<body>
+  <h1>🎯 Seleccionar Objetivos Educativos</h1>
+  <div id="listaObjetivos"></div>
+  <div class="mensaje" id="mensaje"></div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    const usuarioId = localStorage.getItem("usuarioId");
+    const mensajeDiv = document.getElementById("mensaje");
+
+    if (!token || !usuarioId) {
+      window.location.href = "/login.html";
+    }
+
+    // Cargar la lista de objetivos
+    fetch("/api/Objetivo/listar", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      const contenedor = document.getElementById("listaObjetivos");
+
+      data.forEach(obj => {
+        const div = document.createElement("div");
+        div.className = "objetivo";
+
+        div.innerHTML = `
+          <h3>${obj.nombre}</h3>
+          <p><strong>Área:</strong> ${obj.area}</p>
+          <p>${obj.descripcion}</p>
+          <button onclick="seleccionar('${obj.id}')">Seleccionar</button>
+        `;
+
+        contenedor.appendChild(div);
+      });
+    })
+    .catch(err => {
+      mensajeDiv.textContent = "Error al cargar los objetivos.";
+      mensajeDiv.style.color = "red";
+    });
+
+    function seleccionar(objetivoId) {
+      fetch("/api/Objetivo/seleccionar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          usuarioId,
+          objetivoId
+        })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error();
+        mensajeDiv.textContent = "Objetivo seleccionado correctamente.";
+        mensajeDiv.style.color = "green";
+      })
+      .catch(() => {
+        mensajeDiv.textContent = "Hubo un problema al seleccionar el objetivo.";
+        mensajeDiv.style.color = "red";
+      });
+    }
+  </script>
+</body>
+</html>
