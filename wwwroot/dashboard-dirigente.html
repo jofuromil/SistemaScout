@@ -11,11 +11,16 @@
     .section { margin-bottom: 1.5rem; }
     button { padding: 0.5rem 1rem; margin: 0.3rem; border: none; background-color: #3498db; color: white; border-radius: 5px; cursor: pointer; }
     button:hover { background-color: #2980b9; }
+    .unidad-info { background: #eaf2f8; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; }
   </style>
 </head>
 <body>
   <div class="panel">
     <h1>🎖️ Panel del Dirigente</h1>
+
+    <div class="unidad-info" id="unidadInfo" style="display:none;">
+      <strong>Código de tu unidad:</strong> <span id="codigoUnidad"></span>
+    </div>
 
     <div class="section">
       <h2>Unidad Scout</h2>
@@ -42,5 +47,30 @@
       <button onclick="location.href='login.html'">Cerrar sesión</button>
     </div>
   </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    if (!token) {
+      window.location.href = "/login.html";
+    }
+
+    fetch("/api/users/me", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(res => res.json())
+    .then(user => {
+      if (user.unidad && user.unidad.codigoUnidad) {
+        document.getElementById("codigoUnidad").textContent = user.unidad.codigoUnidad;
+        document.getElementById("unidadInfo").style.display = "block";
+      }
+    })
+    .catch(() => {
+      alert("Error al cargar los datos del dirigente.");
+      window.location.href = "/login.html";
+    });
+  </script>
 </body>
 </html>
+
