@@ -11,7 +11,6 @@ ENV PATH="$PATH:/root/.dotnet/tools"
 RUN dotnet restore
 
 # ✅ Ejecutar migraciones con parámetros explícitos
-RUN dotnet ef database update --project BackendScout.csproj --startup-project BackendScout.csproj --context AppDbContext
 
 RUN dotnet publish "BackendScout.csproj" -c Release -o /app/publish
 
