@@ -97,7 +97,6 @@ builder.Services.AddScoped<PasswordResetService>();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
 // ✅ Configuración JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -121,24 +120,21 @@ var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://*:{port}");
 
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    context.LimpiarRequisitosInvalidos(); // Este es el método temporal que limpiará los datos inválidos
-}
 
-// ✅ Ejecutar migraciones automáticamente al iniciar (Render gratuito)
-//using (var scope = app.Services.CreateScope())
-//{
-//    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-//    db.Database.Migrate();
-//}
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate(); // 👈 Esta línea es la clave
-    await db.EliminarRequisitosCumplidosInvalidos();
-}
+// 🔴 COMENTADO: para evitar error si no hay base de datos
+// using (var scope = app.Services.CreateScope())
+// {
+//     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+//     context.LimpiarRequisitosInvalidos(); // método temporal
+// }
+
+// 🔴 COMENTADO: migraciones automáticas y limpieza temporal de requisitos
+// using (var scope = app.Services.CreateScope())
+// {
+//     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+//     db.Database.Migrate(); // 👈 Esta línea es la que causaría el error si no hay BD
+//     await db.EliminarRequisitosCumplidosInvalidos();
+// }
 
 app.UseSwagger();
 app.UseSwaggerUI();
