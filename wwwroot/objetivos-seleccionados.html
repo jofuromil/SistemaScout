@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mis Objetivos Seleccionados</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    .objetivo {
+      background: white;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .objetivo h3 {
+      margin: 0 0 10px;
+    }
+
+    .validado {
+      color: green;
+      font-weight: bold;
+    }
+
+    .pendiente {
+      color: orange;
+      font-weight: bold;
+    }
+
+    .volver {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎯 Mis Objetivos Seleccionados</h1>
+  <div id="contenedorObjetivos"></div>
+  <div class="volver">
+    <a href="/panel-scout.html">🔙 Volver al panel</a>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    const usuarioId = localStorage.getItem("usuarioId");
+
+    if (!token || !usuarioId) {
+      window.location.href = "/login.html";
+    }
+
+    fetch(`/api/Objetivo/historial?usuarioId=${usuarioId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      const contenedor = document.getElementById("contenedorObjetivos");
+      if (data.length === 0) {
+        contenedor.innerHTML = "<p>No has seleccionado ningún objetivo todavía.</p>";
+        return;
+      }
+
+      data.forEach(obj => {
+        const div = document.createElement("div");
+        div.className = "objetivo";
+        div.innerHTML = `
+          <h3>${obj.area}</h3>
+          <p><strong>Rama:</strong> ${obj.rama}</p>
+          <p><strong>Descripción:</strong> ${obj.descripcion}</p>
+          <p><strong>Estado:</strong> <span class="${obj.validado ? 'validado' : 'pendiente'}">
+            ${obj.validado ? '✅ Validado' : '⏳ Pendiente'}
+          </span></p>
+        `;
+        contenedor.appendChild(div);
+      });
+    })
+    .catch(err => {
+      console.error("Error al cargar historial:", err);
+      document.getElementById("contenedorObjetivos").innerHTML =
+        "<p>Error al cargar los objetivos seleccionados.</p>";
+    });
+  </script>
+</body>
+</html>

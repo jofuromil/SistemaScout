@@ -9,14 +9,28 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Security.Claims;
+using Microsoft.Extensions.FileProviders;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 // ✅ Activar licencia QuestPDF
 QuestPDF.Settings.License = LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ✅ Clave JWT desde appsettings.json o fija
+// ✅ Clave JWT desde appsettings.json o valor por defecto
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "clave-secreta-super-segura-scout";
+
+// ✅ CORS para React
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 // ✅ Servicios base
 builder.Services.AddControllers()
@@ -73,13 +87,16 @@ builder.Services.AddScoped<PdfObjetivosService>();
 builder.Services.AddScoped<PdfService>();
 builder.Services.AddScoped<MensajeService>();
 builder.Services.AddScoped<EspecialidadService>();
+builder.Services.AddTransient<EspecialidadImporter>();
 builder.Services.AddScoped<EventoService>();
 builder.Services.AddScoped<DocumentoEventoService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<PasswordResetService>();
 
 // ✅ Base de datos
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source=ScoutDB.db"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 // ✅ Configuración JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -93,9 +110,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "BackendScout",
-            ValidAudience = builder.Configuration["Jwt:Audience"] ?? "BackendScoutUsuarios",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+            RoleClaimType = ClaimTypes.Role
         };
     });
 
@@ -103,23 +121,45 @@ var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://*:{port}");
 
 var app = builder.Build();
-// Ejecutar migraciones automáticamente al iniciar (Render gratuito)
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    context.LimpiarRequisitosInvalidos(); // Este es el método temporal que limpiará los datos inválidos
+}
+
+// ✅ Ejecutar migraciones automáticamente al iniciar (Render gratuito)
+//using (var scope = app.Services.CreateScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+//    db.Database.Migrate();
+//}
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
+    await db.EliminarRequisitosCumplidosInvalidos();
 }
 
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseDefaultFiles(); // Sirve index.html automáticamente
-app.UseStaticFiles();  // Habilita archivos estáticos como CSS y JS
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+// ✅ Exponer carpeta ArchivosMensajes
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "ArchivosMensajes")),
+    RequestPath = "/archivos"
+});
+
+// ✅ CORS
+app.UseCors("AllowReactApp");
 
 // ✅ Seguridad
-app.UseAuthentication();   // Debe ir primero
-app.UseAuthorization();    // Luego autorización
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

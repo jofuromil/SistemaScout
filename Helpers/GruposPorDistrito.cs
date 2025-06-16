@@ -4,6 +4,17 @@ namespace BackendScout.Helpers
     {
         public static readonly Dictionary<string, List<string>> Grupos = new()
         {
+            ["PANDO"] = new List<string>
+            {
+                "COBIJA",
+                "PUERTO"
+            },
+
+            ["BENI"] = new List<string>
+            {
+                "TROPA AVALON",
+            },
+
             ["CHUQUISACA"] = new List<string>
             {
                 "JUNIN",
@@ -57,7 +68,8 @@ namespace BackendScout.Helpers
                 "CAP. USTARIZ",
                 "SAN FRANCISCO",
                 "LA SALLE \"HNO. JUAN FROMENTAL\"",
-                "CAMACHO"
+                "CAMACHO",
+                "MEJILLONES"
             },
             ["POTOSI"] = new List<string>
             {

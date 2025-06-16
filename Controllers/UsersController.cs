@@ -17,12 +17,14 @@ namespace BackendScout.Controllers
         private readonly UserService _userService;
         private readonly AuthService _authService;
         private readonly JwtService _jwtService;
+        private readonly PasswordResetService _resetService;
 
-        public UsersController(UserService userService, AuthService authService, JwtService jwtService)
+        public UsersController(UserService userService, AuthService authService, JwtService jwtService, PasswordResetService resetService)
         {
             _userService = userService;
             _authService = authService;
             _jwtService = jwtService;
+            _resetService = resetService;
         }
 
         [HttpPost("registrar")]
@@ -39,7 +41,7 @@ namespace BackendScout.Controllers
                 Password = _authService.HashPassword(request.Password),
                 Telefono = string.Empty,
                 Ciudad = string.Empty,
-                Tipo = "Scout", // valor por defecto
+                Tipo = "Scout",
                 Rama = string.Empty,
                 UnidadId = null
             };
@@ -55,21 +57,20 @@ namespace BackendScout.Controllers
         {
             var user = await _userService.ValidarLogin(dto.Correo, dto.Password);
             if (user == null)
-    return Unauthorized(new { mensaje = "El correo no está registrado." });
+                return Unauthorized(new { mensaje = "El correo no está registrado." });
 
-if (!_authService.VerifyPassword(dto.Password, user.Password))
-{
-    // Validación adicional para detectar contraseñas antiguas no hasheadas
-    if (!user.Password.StartsWith("$2"))
-    {
-        return Unauthorized(new
-        {
-            mensaje = "Tu cuenta fue creada antes de una actualización del sistema. Por favor, crea una nueva cuenta."
-        });
-    }
+            if (!_authService.VerifyPassword(dto.Password, user.Password))
+            {
+                if (!user.Password.StartsWith("$2"))
+                {
+                    return Unauthorized(new
+                    {
+                        mensaje = "Tu cuenta fue creada antes de una actualización del sistema. Por favor, crea una nueva cuenta."
+                    });
+                }
 
-    return Unauthorized(new { mensaje = "Contraseña incorrecta." });
-}
+                return Unauthorized(new { mensaje = "Contraseña incorrecta." });
+            }
 
             var token = _authService.GenerateJwtToken(user);
 
@@ -86,7 +87,8 @@ if (!_authService.VerifyPassword(dto.Password, user.Password))
                 }
             });
         }
-        [HttpGet("me")]
+
+       [HttpGet("me")]
 [Authorize]
 public async Task<IActionResult> ObtenerDatosPropios()
 {
@@ -105,10 +107,70 @@ public async Task<IActionResult> ObtenerDatosPropios()
         unidad = usuario.Unidad != null ? new
         {
             usuario.Unidad.Id,
-            usuario.Unidad.CodigoUnidad
+            usuario.Unidad.Nombre,
+            usuario.Unidad.CodigoUnidad,
+            usuario.Unidad.Rama,
+            grupoScout = usuario.Unidad.GrupoScout,
+            distrito = usuario.Unidad.Distrito
         } : null
     });
 }
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> ObtenerPorId(Guid id)
+        {
+            var usuario = await _userService.ObtenerPorId(id);
+            if (usuario == null)
+                return NotFound();
+
+            return Ok(usuario);
+        }
+        [HttpGet("kardex-scout/{scoutId}")]
+        [Authorize(Roles = "Dirigente")]
+        public async Task<IActionResult> ObtenerDatosScoutParaKardex(Guid scoutId)
+        {
+            var scout = await _userService.ObtenerScoutConUnidad(scoutId);
+            if (scout == null) return NotFound();
+
+            return Ok(new
+            {
+                scout.Id,
+                scout.NombreCompleto,
+                scout.Rama,
+                unidad = scout.Unidad != null ? new
+                {
+                    scout.Unidad.Nombre,
+                    scout.Unidad.Rama,
+                    scout.Unidad.GrupoScout,
+                    scout.Unidad.Distrito
+                } : null
+            });
+        }
+
+        [HttpGet("perfil")]
+        [Authorize]
+        public async Task<IActionResult> VerPerfil()
+        {
+            var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var perfil = await _userService.ObtenerPerfilAsync(Guid.Parse(userId));
+            if (perfil == null)
+                return NotFound(new { mensaje = "Usuario no encontrado." });
+
+            return Ok(perfil);
+        }
+
+        [HttpPut("perfil")]
+        [Authorize]
+        public async Task<IActionResult> EditarPerfil([FromBody] ActualizarPerfilRequest request)
+        {
+            var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var actualizado = await _userService.ActualizarPerfilAsync(Guid.Parse(userId), request);
+            if (!actualizado)
+                return BadRequest(new { mensaje = "No se pudo actualizar el perfil." });
+
+            return Ok(new { mensaje = "Perfil actualizado correctamente." });
+        }
 
         [HttpGet("todos")]
         public async Task<ActionResult<List<User>>> ObtenerTodos()
@@ -198,7 +260,6 @@ public async Task<IActionResult> ObtenerDatosPropios()
                                 columns.RelativeColumn(1);
                             });
 
-                            // Encabezados
                             table.Cell().Element(CellStyle).Text("Nombre");
                             table.Cell().Element(CellStyle).Text("Correo");
                             table.Cell().Element(CellStyle).Text("Teléfono");
@@ -206,7 +267,6 @@ public async Task<IActionResult> ObtenerDatosPropios()
                             table.Cell().Element(CellStyle).Text("Tipo");
                             table.Cell().Element(CellStyle).Text("Rama");
 
-                            // Datos
                             foreach (var u in miembros)
                             {
                                 table.Cell().Element(CellStyle).Text(u.NombreCompleto);
@@ -244,6 +304,18 @@ public async Task<IActionResult> ObtenerDatosPropios()
             {
                 return BadRequest(new { mensaje = ex.Message });
             }
+        }
+
+        [HttpPost("{dirigenteId}/generar-codigo-reset/{usuarioId}")]
+        [Authorize(Roles = "Dirigente")]
+        public async Task<IActionResult> GenerarCodigoReset(Guid dirigenteId, Guid usuarioId)
+        {
+            var puede = await _userService.PerteneceALaMismaUnidad(dirigenteId, usuarioId);
+            if (!puede)
+                return Unauthorized(new { mensaje = "No puedes generar un código para este usuario." });
+
+            var codigo = await _resetService.GenerarCodigoAsync(usuarioId);
+            return Ok(new { codigo });
         }
     }
 }

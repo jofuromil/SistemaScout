@@ -1,3 +1,5 @@
+using BackendScout.Models;
+
 public class TipoEvento
 {
     public int Id { get; set; }

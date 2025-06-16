@@ -24,7 +24,14 @@ namespace BackendScout.Controllers
             try
             {
                 var nuevaUnidad = await _unidadService.CrearUnidad(request);
-                return Ok(nuevaUnidad);
+
+                return Ok(new
+                {
+                    id = nuevaUnidad.Id,
+                    codigo = nuevaUnidad.CodigoUnidad,  // ✅ Código corto para mostrar
+                    nombre = nuevaUnidad.Nombre,
+                    rama = nuevaUnidad.Rama
+                });
             }
             catch (Exception ex)
             {

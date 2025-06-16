@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using BackendScout.Data;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using BackendScout.Models;
 
 namespace BackendScout.Controllers
 {
@@ -13,21 +17,49 @@ namespace BackendScout.Controllers
     {
         private readonly EventoService _eventoService;
         private readonly DocumentoEventoService _documentoService;
-
-        public EventoController(EventoService eventoService, DocumentoEventoService documentoService)
-        {
-            _eventoService = eventoService;
-            _documentoService = documentoService;
-        }
-
+        private readonly AppDbContext _context;
+        public EventoController(EventoService eventoService, AppDbContext context)
+{
+    _eventoService = eventoService;
+    _context = context;
+}
         // ...aquí siguen tus métodos...
 
-    [HttpPost]
+        [HttpPost("unidad")]
+public async Task<IActionResult> CrearEventoPorUnidad([FromBody] CrearEventoUnidadRequest request)
+{
+    try
+    {
+        var creado = await _eventoService.CrearEventoPorCodigoUnidadAsync(request);
+        return Ok(new { mensaje = "Evento creado correctamente" });
+    }
+    catch (Exception ex)
+    {
+        return BadRequest(new
+        {
+            mensaje = ex.Message,
+            detalle = ex.InnerException?.Message
+        });
+    }
+}
+
+        [HttpPost]
     public async Task<IActionResult> CrearEvento([FromBody] Evento evento)
     {
         var creado = await _eventoService.CrearEventoAsync(evento);
         return Ok(creado);
     }
+    [HttpGet("unidad/{codigoUnidad}")]
+public async Task<IActionResult> EventosPorUnidad(string codigoUnidad)
+{
+    var unidad = await _eventoService.ObtenerUnidadPorCodigoAsync(codigoUnidad);
+    if (unidad == null)
+        return NotFound(new { mensaje = "Unidad no encontrada con el código proporcionado." });
+
+    var eventos = await _eventoService.ObtenerEventosDeUnidadAsync(unidad.Id);
+    return Ok(eventos);
+}
+
 
     [HttpGet]
     public async Task<IActionResult> ListarEventos()
@@ -82,7 +114,24 @@ public async Task<IActionResult> VerInscritos(int eventoId, Guid dirigenteId)
 {
     try
     {
-        var lista = await _eventoService.ObtenerInscritosDelEventoAsync(eventoId, dirigenteId);
+        var evento = await _context.Eventos.FindAsync(eventoId);
+        if (evento == null)
+            return NotFound(new { mensaje = "Evento no encontrado." });
+
+        var esOrganizador = evento.OrganizadorUnidadId == 
+                        _context.Users
+                        .Where(u => u.Id == dirigenteId && u.Tipo == "Dirigente")
+                        .Select(u => u.UnidadId)
+                        .FirstOrDefault()
+    || await _context.OrganizadoresEvento.AnyAsync(o => o.EventoId == eventoId && o.UserId == dirigenteId);
+
+        if (!esOrganizador)
+            return StatusCode(403, new { mensaje = "No tienes permiso para ver los inscritos." });
+
+        var lista = await _context.UsuarioEvento
+            .Where(u => u.EventoId == eventoId)
+            .Include(u => u.User)
+            .ToListAsync();
 
         var resultado = lista.Select(u => new
         {
@@ -95,16 +144,15 @@ public async Task<IActionResult> VerInscritos(int eventoId, Guid dirigenteId)
 
         return Ok(resultado);
     }
-    catch (UnauthorizedAccessException ex)
-    {
-        return StatusCode(403, new { mensaje = ex.Message });
-    }
     catch (Exception ex)
     {
         return BadRequest(new { mensaje = ex.Message });
     }
 }
-[HttpPost("actualizar-estado")]
+
+
+        [HttpPost("actualizar-estado")]
+        [Authorize(Roles = "Dirigente")]
 public async Task<IActionResult> ActualizarEstadoInscripcion([FromBody] ActualizarEstadoInscripcionRequest request)
 {
     try
@@ -149,23 +197,43 @@ public async Task<IActionResult> AgregarOrganizador([FromBody] AgregarOrganizado
         return BadRequest(new { mensaje = ex.Message });
     }
 }
-[HttpGet("listar/{eventoId}")]
-public async Task<IActionResult> ListarArchivosEvento(int eventoId)
-{
-    var archivos = await _documentoService.ListarArchivosDeEventoAsync(eventoId);
+        [HttpGet("listar/{eventoId}")]
+        public async Task<IActionResult> ListarArchivosEvento(int eventoId)
+        {
+            var archivos = await _documentoService.ListarArchivosDeEventoAsync(eventoId);
 
-    var resultado = archivos.Select(a => new
-    {
-        a.Id,
-        a.NombreArchivo,
-        a.TipoMime,
-        a.FechaSubida,
-        url = a.RutaArchivo  // Ruta relativa desde el navegador
-    });
+            var resultado = archivos.Select(a => new
+            {
+                a.Id,
+                a.NombreArchivo,
+                a.TipoMime,
+                a.FechaSubida,
+                url = a.RutaArchivo  // Ruta relativa desde el navegador
+            });
 
-    return Ok(resultado);
-}
-[HttpPost("enviar-mensaje")]
+            return Ok(resultado);
+        }
+        [HttpGet("detalle/{id}")]
+        public async Task<IActionResult> ObtenerDetalleEvento(int id)
+        {
+            var evento = await _context.Eventos.FindAsync(id);
+            if (evento == null)
+                return NotFound(new { mensaje = "Evento no encontrado" });
+
+            return Ok(evento);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> ObtenerEventoPorId(int id)
+        {
+            var evento = await _context.Eventos.FindAsync(id);
+
+            if (evento == null)
+                return NotFound(new { mensaje = "Evento no encontrado." });
+
+            return Ok(evento);
+        }
+
+        [HttpPost("enviar-mensaje")]
 public async Task<IActionResult> EnviarMensajeEvento([FromBody] EnviarMensajeEventoRequest request)
 {
     try

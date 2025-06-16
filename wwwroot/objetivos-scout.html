@@ -7,10 +7,31 @@
   <style>
     body { font-family: sans-serif; background: #f4f4f4; padding: 20px; }
     h1 { color: #2c3e50; }
-    .objetivo { background: white; margin: 10px 0; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .objetivo {
+      background: white;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: background-color 0.3s;
+    }
+    .seleccionado {
+      background-color: #d4edda;
+    }
     .objetivo h3 { margin: 0; }
-    button { padding: 8px 12px; background-color: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button {
+      padding: 8px 12px;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
     button:hover { background-color: #1e8449; }
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
     .mensaje { margin-top: 20px; color: green; }
   </style>
 </head>
@@ -22,41 +43,78 @@
   <script>
     const token = localStorage.getItem("token");
     const usuarioId = localStorage.getItem("usuarioId");
+    const rama = localStorage.getItem("rama");
+    const nivelProgresion = localStorage.getItem("nivelProgresion") || "";
     const mensajeDiv = document.getElementById("mensaje");
 
-    if (!token || !usuarioId) {
+    if (!token || !usuarioId || !rama) {
       window.location.href = "/login.html";
     }
 
-    // Cargar la lista de objetivos
-    fetch("/api/Objetivo/listar", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+    let objetivosSeleccionados = [];
+
+    // Paso 1: Cargar historial de objetivos ya seleccionados
+    fetch(`/api/Objetivo/historial?usuarioId=${usuarioId}`, {
+      headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => res.json())
-    .then(data => {
-      const contenedor = document.getElementById("listaObjetivos");
-
-      data.forEach(obj => {
-        const div = document.createElement("div");
-        div.className = "objetivo";
-
-        div.innerHTML = `
-          <h3>${obj.nombre}</h3>
-          <p><strong>Área:</strong> ${obj.area}</p>
-          <p>${obj.descripcion}</p>
-          <button onclick="seleccionar('${obj.id}')">Seleccionar</button>
-        `;
-
-        contenedor.appendChild(div);
-      });
+    .then(historial => {
+      objetivosSeleccionados = historial.map(o => o.id); // importante: ID del objetivo educativo
+      cargarObjetivos();
     })
     .catch(err => {
-      mensajeDiv.textContent = "Error al cargar los objetivos.";
+      mensajeDiv.textContent = "Error al cargar historial.";
       mensajeDiv.style.color = "red";
     });
 
+    // Paso 2: Cargar la lista de objetivos disponibles
+    function cargarObjetivos() {
+      let url = `/api/Objetivo/listar?rama=${encodeURIComponent(rama)}`;
+      if (nivelProgresion) {
+        url += `&nivelProgresion=${encodeURIComponent(nivelProgresion)}`;
+      }
+
+      fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        const contenedor = document.getElementById("listaObjetivos");
+        if (data.length === 0) {
+          contenedor.innerHTML = "<p>No hay objetivos disponibles para esta selección.</p>";
+          return;
+        }
+
+        data.forEach(obj => {
+          const div = document.createElement("div");
+          const idBoton = `boton-${obj.id}`;
+          const idContenedor = `contenedor-${obj.id}`;
+          const yaSeleccionado = objetivosSeleccionados.includes(obj.id);
+
+          div.className = "objetivo" + (yaSeleccionado ? " seleccionado" : "");
+          div.id = idContenedor;
+
+          div.innerHTML = `
+            <h3>${obj.nombre}</h3>
+            <p><strong>Área:</strong> ${obj.area}</p>
+            <p>${obj.descripcion}</p>
+            <button id="${idBoton}" onclick="seleccionar('${obj.id}')" ${yaSeleccionado ? "disabled" : ""}>
+              ${yaSeleccionado ? "Seleccionado" : "Seleccionar"}
+            </button>
+          `;
+
+          contenedor.appendChild(div);
+        });
+      })
+      .catch(() => {
+        mensajeDiv.textContent = "Error al cargar los objetivos.";
+        mensajeDiv.style.color = "red";
+      });
+    }
+
+    // Paso 3: Selección de objetivo
     function seleccionar(objetivoId) {
       fetch("/api/Objetivo/seleccionar", {
         method: "POST",
@@ -65,17 +123,23 @@
           Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          usuarioId,
-          objetivoId
+          objetivoEducativoId: objetivoId
         })
       })
       .then(res => {
         if (!res.ok) throw new Error();
-        mensajeDiv.textContent = "Objetivo seleccionado correctamente.";
+
+        const boton = document.getElementById(`boton-${objetivoId}`);
+        const contenedor = document.getElementById(`contenedor-${objetivoId}`);
+        boton.disabled = true;
+        boton.innerText = "Seleccionado";
+        contenedor.classList.add("seleccionado");
+
+        mensajeDiv.textContent = "✅ Objetivo seleccionado correctamente.";
         mensajeDiv.style.color = "green";
       })
       .catch(() => {
-        mensajeDiv.textContent = "Hubo un problema al seleccionar el objetivo.";
+        mensajeDiv.textContent = "❌ Hubo un problema al seleccionar el objetivo.";
         mensajeDiv.style.color = "red";
       });
     }

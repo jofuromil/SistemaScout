@@ -12,8 +12,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>malbyj4vvu</Fingerprint>
-      <Integrity>cjGpcJfGYG7er22nHlGVY03u7Q5J6ofn5V5HxeeaMs4=</Integrity>
+      <Fingerprint>fg7yo8kdov</Fingerprint>
+      <Integrity>we3wusLEDm3eMi228PrOJx2iyDELn5x4DKHRiL93Wno=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\dashboard-dirigente.html'))</OriginalItemSpec>
@@ -30,8 +30,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>vd1ng4n8pz</Fingerprint>
-      <Integrity>w3bGqbnsGSUCD52Jd5BaqPLqvQvuGqzIstu5uL8v1Pg=</Integrity>
+      <Fingerprint>473ekuxhsa</Fingerprint>
+      <Integrity>UNwOdKjgs2D9IyWc9/ynuOOGWH/ZnnD1O1omtBdM3yw=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\dashboard-scout.html'))</OriginalItemSpec>
@@ -66,8 +66,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>bfwuabbxtx</Fingerprint>
-      <Integrity>p0UIlw30chpHi2Fwikd6rLCiPx67s1P9MegG9DHmPQc=</Integrity>
+      <Fingerprint>fyx24d907c</Fingerprint>
+      <Integrity>mX/uUgVavLqi758tvvdkFC7jAP002dXMUcQQuHZzAIs=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\login.html'))</OriginalItemSpec>
@@ -89,6 +89,60 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\login.js'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\objetivos-nivel.html'))">
+      <SourceType>Package</SourceType>
+      <SourceId>BackendScout</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/BackendScout</BasePath>
+      <RelativePath>objetivos-nivel.html</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>v8pz61iwpy</Fingerprint>
+      <Integrity>cQuKTrygS1K7URgvGVOS+5GiPpCIslPpvXPmbQuNQ3w=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\objetivos-nivel.html'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\objetivos-scout.html'))">
+      <SourceType>Package</SourceType>
+      <SourceId>BackendScout</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/BackendScout</BasePath>
+      <RelativePath>objetivos-scout.html</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>gh24o87rr3</Fingerprint>
+      <Integrity>lE2ghEYuQPYhHpoxTrezoiB5/RjRU6sxpYisqUFbIKI=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\objetivos-scout.html'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\objetivos-seleccionados.html'))">
+      <SourceType>Package</SourceType>
+      <SourceId>BackendScout</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/BackendScout</BasePath>
+      <RelativePath>objetivos-seleccionados.html</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>qwb5osp540</Fingerprint>
+      <Integrity>iqMYO5u7qSIP3VopT6s9OGcPJSQjeGw4HT0AVrE2T1Y=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\objetivos-seleccionados.html'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\panel-unidad.html'))">
       <SourceType>Package</SourceType>
@@ -120,8 +174,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>mlv17flzdp</Fingerprint>
-      <Integrity>OmmEoRWBy6YlQJLEi71uRZaM0sdrMDt9jefWJPkIanI=</Integrity>
+      <Fingerprint>u9j8m2664h</Fingerprint>
+      <Integrity>bu5ojsdgqN3cvbT5KR9AQx+v7C3o1YCUyx0nDBDi1eU=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\register.html'))</OriginalItemSpec>
@@ -138,8 +192,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>u5siv0fwrr</Fingerprint>
-      <Integrity>7jEHc7uyu8P/DqmDZ6xVO3I2rKqfbHLMRaJOppHsXl0=</Integrity>
+      <Fingerprint>fvnm8uh3nj</Fingerprint>
+      <Integrity>pc3Fl2V8tsa7ibD9U0HwWHSsuFELVrNVzzPBXcIeMyg=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\unidades.html'))</OriginalItemSpec>

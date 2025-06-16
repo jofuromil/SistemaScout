@@ -14,5 +14,13 @@ namespace BackendScout.Models
         public Guid? UnidadId { get; set; }  // Permite que un usuario esté (o no) en una unidad
         public Unidad? Unidad { get; set; }
 
+        // 🔽 Nuevos campos de ficha personal
+        public string? Direccion { get; set; }
+        public string? InstitucionEducativa { get; set; } // Colegio o universidad
+        public string? NivelEstudios { get; set; } // Primaria, Secundaria, Universitario, etc.
+        public string? Genero { get; set; }
+        public string? Profesion { get; set; }       // SOLO Dirigentes
+        public string? Ocupacion { get; set; }       // SOLO Dirigentes
+
     }
 }

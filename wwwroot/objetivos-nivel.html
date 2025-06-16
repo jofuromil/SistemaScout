@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Elegir Nivel - Sistema Scout</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    select, button {
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+      width: 300px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📘 Elegir Nivel de Progresión</h1>
+  <div id="nivelContainer"></div>
+  <button onclick="continuar()">Continuar</button>
+
+  <script>
+    const rama = localStorage.getItem("rama");
+    const nivelContainer = document.getElementById("nivelContainer");
+
+    let opciones = [];
+
+    if (rama === "Lobatos") {
+      opciones = ["", "PATA TIERNA - SALTADOR", "RASTREADOR - CAZADOR"];
+    } else if (rama === "Exploradores") {
+      opciones = ["", "PISTA - SENDA", "RUMBO - TRAVESIA"];
+    }
+
+    if (opciones.length > 0) {
+      const select = document.createElement("select");
+      select.id = "nivelSelect";
+      opciones.forEach(op => {
+        const option = document.createElement("option");
+        option.value = op;
+        option.textContent = op === "" ? "Todos los niveles" : op;
+        select.appendChild(option);
+      });
+      nivelContainer.appendChild(select);
+    } else {
+      // Si no es Lobato ni Explorador, se salta esta pantalla
+      window.location.href = "/objetivos-scout.html";
+    }
+
+    function continuar() {
+      const select = document.getElementById("nivelSelect");
+      const nivel = select ? select.value : "";
+      localStorage.setItem("nivelProgresion", nivel);
+      window.location.href = "/objetivos-scout.html";
+    }
+  </script>
+</body>
+</html>

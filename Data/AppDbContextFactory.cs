@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using BackendScout.Models;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
+
 
 namespace BackendScout.Data
 {
@@ -11,7 +13,7 @@ namespace BackendScout.Data
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
 
             // Aquí defines tu proveedor de base de datos:
-            optionsBuilder.UseSqlite("Data Source=ScoutDB.db"); // O usa tu cadena real
+            optionsBuilder.UseNpgsql("Host=gondola.proxy.rlwy.net;Port=51801;Database=railway;Username=postgres;Password=LgvuqZTbFDXsMPWiImNvDhVtrbPnvuDE;Ssl Mode=Require;Trust Server Certificate=true");
 
             return new AppDbContext(optionsBuilder.Options);
         }

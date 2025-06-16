@@ -17,6 +17,29 @@ public class EventoService
         _context = context;
         _env = env;
     }
+    public async Task<Evento> CrearEventoPorCodigoUnidadAsync(CrearEventoUnidadRequest request)
+{
+    var unidad = await _context.Unidades
+        .FirstOrDefaultAsync(u => u.CodigoUnidad == request.CodigoUnidad);
+
+    if (unidad == null)
+        throw new Exception("Unidad no encontrada con el código proporcionado.");
+
+    var nuevoEvento = new Evento
+{
+    Nombre = request.Nombre,
+    Descripcion = request.Descripcion,
+    FechaInicio = request.FechaInicio,
+    FechaFin = request.FechaFin,
+    OrganizadorUnidadId = unidad.Id,
+    Nivel = "Unidad"
+};
+
+    _context.Eventos.Add(nuevoEvento);
+    await _context.SaveChangesAsync();
+
+    return nuevoEvento;
+}
 
     public async Task<byte[]> GenerarEstadisticasPdfAsync(int eventoId, Guid dirigenteId)
     {
@@ -105,75 +128,150 @@ public class EventoService
     }
 
     public async Task<List<Evento>> ListarEventosAsync()
+{
+    return await _context.Eventos.ToListAsync(); // ✅ corregido
+}
+public async Task<Unidad?> ObtenerUnidadPorCodigoAsync(string codigoUnidad)
+{
+    return await _context.Unidades.FirstOrDefaultAsync(u => u.CodigoUnidad == codigoUnidad);
+}
+public async Task<List<Evento>> ObtenerEventosDeUnidadAsync(Guid unidadId)
+{
+    try
     {
         return await _context.Eventos
-            .Include(e => e.TipoEvento)
+            .Where(e => e.OrganizadorUnidadId == unidadId)
+            .OrderByDescending(e => e.FechaInicio)
+            .Select(e => new Evento
+            {
+                Id = e.Id,
+                Nombre = e.Nombre,
+                FechaInicio = e.FechaInicio,
+                FechaFin = e.FechaFin,
+                Descripcion = e.Descripcion,
+                ImagenUrl = e.ImagenUrl,
+                Nivel = e.Nivel,
+                OrganizadorUnidadId = e.OrganizadorUnidadId,
+                OrganizadorGrupoId = e.OrganizadorGrupoId,
+                OrganizadorDistritoId = e.OrganizadorDistritoId,
+                RamasDestino = e.RamasDestino,
+                CupoMaximo = e.CupoMaximo
+            })
             .ToListAsync();
     }
-
-    public async Task<string> InscribirUsuarioAsync(int eventoId, Guid usuarioId, string? tipoParticipacion)
+    catch (Exception ex)
     {
-        var yaInscrito = await _context.UsuariosEvento
-            .FirstOrDefaultAsync(u => u.EventoId == eventoId && u.UsuarioId == usuarioId);
-
-        if (yaInscrito != null)
-            return "Ya estás inscrito en este evento.";
-
-        var nuevo = new UsuarioEvento
-        {
-            EventoId = eventoId,
-            UsuarioId = usuarioId,
-            TipoParticipacion = tipoParticipacion ?? "Participante",
-            Estado = "Pendiente"
-        };
-
-        _context.UsuariosEvento.Add(nuevo);
-        await _context.SaveChangesAsync();
-
-        return "Inscripción enviada correctamente.";
+        Console.WriteLine($"🔥 ERROR al cargar eventos: {ex.Message}");
+        return new List<Evento>(); // previene crash total
     }
+}
+
+public async Task<string> InscribirUsuarioAsync(int eventoId, Guid usuarioId, string? tipoParticipacion)
+{
+    var evento = await _context.Eventos.FindAsync(eventoId);
+    if (evento == null)
+    {
+        Console.WriteLine($"❌ Evento con ID {eventoId} no encontrado.");
+        throw new Exception("El evento no existe.");
+    }
+
+    var usuario = await _context.Users.FindAsync(usuarioId);
+    if (usuario == null)
+    {
+        Console.WriteLine($"❌ Usuario con ID {usuarioId} no encontrado.");
+        throw new Exception("El usuario no existe.");
+    }
+
+    var yaInscrito = await _context.UsuarioEvento
+        .FirstOrDefaultAsync(u => u.EventoId == eventoId && u.UsuarioId == usuarioId);
+
+    if (yaInscrito != null)
+        return "Ya estás inscrito en este evento.";
+
+    var nuevo = new UsuarioEvento
+    {
+        EventoId = eventoId,
+        UsuarioId = usuarioId,
+        TipoParticipacion = tipoParticipacion ?? "Participante",
+        Estado = "Pendiente"
+    };
+
+    try
+    {
+        _context.UsuarioEvento.Add(nuevo);
+        await _context.SaveChangesAsync();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("❌ ERROR al guardar inscripción:");
+        Console.WriteLine(ex.InnerException?.Message ?? ex.Message);
+        throw;
+    }
+
+    return "Inscripción enviada correctamente.";
+}
+
+
 
     public async Task<List<UsuarioEvento>> ObtenerEventosDeUsuarioAsync(Guid usuarioId)
     {
-        return await _context.UsuariosEvento
+        return await _context.UsuarioEvento
             .Where(u => u.UsuarioId == usuarioId)
             .Include(u => u.Evento)
             .ToListAsync();
     }
 
-    public async Task<List<UsuarioEvento>> ObtenerInscritosDelEventoAsync(int eventoId, Guid dirigenteId)
-    {
-        var esOrganizador = await _context.OrganizadoresEvento
-            .AnyAsync(o => o.EventoId == eventoId && o.UserId == dirigenteId);
+   public async Task<List<UsuarioEvento>> ObtenerInscritosDelEventoAsync(int eventoId, Guid dirigenteId)
+{
+    var evento = await _context.Eventos.FindAsync(eventoId);
 
-        if (!esOrganizador)
-            throw new UnauthorizedAccessException("No tienes permiso para ver los inscritos de este evento.");
+    if (evento == null)
+        throw new Exception("Evento no encontrado");
 
-        return await _context.UsuariosEvento
-            .Where(u => u.EventoId == eventoId)
-            .Include(u => u.User)
-            .ToListAsync();
-    }
+    var esOrganizador = evento.OrganizadorUnidadId == dirigenteId
+        || await _context.OrganizadoresEvento.AnyAsync(o => o.EventoId == eventoId && o.UserId == dirigenteId);
 
-    public async Task<string> ActualizarEstadoInscripcionAsync(int eventoId, Guid usuarioId, Guid dirigenteId, string nuevoEstado)
-    {
-        var esOrganizador = await _context.OrganizadoresEvento
-            .AnyAsync(o => o.EventoId == eventoId && o.UserId == dirigenteId);
+    if (!esOrganizador)
+        throw new UnauthorizedAccessException("No tienes permiso para ver los inscritos de este evento.");
 
-        if (!esOrganizador)
-            throw new UnauthorizedAccessException("No tienes permiso para modificar inscripciones en este evento.");
+    return await _context.UsuarioEvento
+        .Where(u => u.EventoId == eventoId)
+        .Include(u => u.User)
+        .ToListAsync();
+}
 
-        var inscripcion = await _context.UsuariosEvento
-            .FirstOrDefaultAsync(u => u.EventoId == eventoId && u.UsuarioId == usuarioId);
+public async Task<string> ActualizarEstadoInscripcionAsync(int eventoId, Guid usuarioId, Guid dirigenteId, string nuevoEstado)
+{
+    // Obtener el evento con su unidad organizadora
+    var evento = await _context.Eventos
+        .Include(e => e.OrganizadorUnidad)
+        .FirstOrDefaultAsync(e => e.Id == eventoId);
 
-        if (inscripcion == null)
-            throw new InvalidOperationException("La inscripción no existe.");
+    if (evento == null)
+        throw new InvalidOperationException("El evento no existe.");
 
-        inscripcion.Estado = nuevoEstado;
-        await _context.SaveChangesAsync();
+    // Verificar si el dirigente es organizador directo o pertenece a la unidad organizadora
+    var esOrganizador = await _context.OrganizadoresEvento
+        .AnyAsync(o => o.EventoId == eventoId && o.UserId == dirigenteId);
 
-        return $"Estado actualizado a {nuevoEstado}.";
-    }
+    var perteneceAMismaUnidad = await _context.Users
+        .AnyAsync(u => u.Id == dirigenteId && u.UnidadId == evento.OrganizadorUnidadId);
+
+    if (!esOrganizador && !perteneceAMismaUnidad)
+        throw new UnauthorizedAccessException("No tienes permiso para modificar inscripciones en este evento.");
+
+    // Buscar inscripción
+    var inscripcion = await _context.UsuarioEvento
+        .FirstOrDefaultAsync(u => u.EventoId == eventoId && u.UsuarioId == usuarioId);
+
+    if (inscripcion == null)
+        throw new InvalidOperationException("La inscripción no existe.");
+
+    inscripcion.Estado = nuevoEstado;
+    await _context.SaveChangesAsync();
+
+    return $"Estado actualizado a {nuevoEstado}.";
+}
 
     public async Task<string> AgregarOrganizadorAsync(int eventoId, Guid principalId, Guid nuevoOrganizadorId)
     {
@@ -216,7 +314,7 @@ public class EventoService
             Contenido = contenido
         };
 
-        var destinatarios = await _context.UsuariosEvento
+        var destinatarios = await _context.UsuarioEvento
             .Where(u => u.EventoId == eventoId && u.Estado == "Aceptado")
             .Select(u => new MensajeEventoDestinatario
             {
@@ -253,7 +351,7 @@ public class EventoService
         if (!esOrganizador)
             throw new UnauthorizedAccessException("No tienes acceso a este evento.");
 
-        var inscritos = await _context.UsuariosEvento
+        var inscritos = await _context.UsuarioEvento
             .Where(u => u.EventoId == eventoId)
             .Include(u => u.User)
             .ToListAsync();
@@ -283,7 +381,7 @@ public class EventoService
     if (!esOrganizador)
         throw new UnauthorizedAccessException("No tienes acceso a los inscritos de este evento.");
 
-    var inscritos = await _context.UsuariosEvento
+    var inscritos = await _context.UsuarioEvento
         .Where(u => u.EventoId == eventoId)
         .Include(u => u.User)
             .ThenInclude(u => u.Unidad)

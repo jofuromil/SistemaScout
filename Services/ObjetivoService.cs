@@ -13,13 +13,18 @@ namespace BackendScout.Services
             _context = context;
         }
 
-        public async Task<List<ObjetivoEducativo>> ObtenerPorRamaYEdad(string rama, int edad)
+        // Nuevo método principal de filtrado por Rama y Nivel de Progresión
+        public async Task<List<ObjetivoEducativo>> ObtenerPorRamaYNivel(string rama, string? nivelProgresion)
         {
-            return await _context.ObjetivosEducativos
-                .Where(o => o.Rama.ToLower() == rama.ToLower()
-                         && edad >= o.EdadMinima
-                         && edad <= o.EdadMaxima)
-                .ToListAsync();
+            var query = _context.ObjetivosEducativos
+                .Where(o => o.Rama.ToLower() == rama.ToLower());
+
+            if (!string.IsNullOrEmpty(nivelProgresion))
+            {
+                query = query.Where(o => o.NivelProgresion.ToLower() == nivelProgresion.ToLower());
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<ObjetivoSeleccionado> SeleccionarObjetivo(Guid usuarioId, Guid objetivoId)
@@ -79,10 +84,10 @@ namespace BackendScout.Services
                       objetivo => objetivo.Id,
                       (seleccion, objetivo) => new
                       {
+                          Id = objetivo.Id, // 👈 Se agrega esto
                           objetivo.Area,
                           objetivo.Descripcion,
-                          objetivo.EdadMinima,
-                          objetivo.EdadMaxima,
+                          objetivo.NivelProgresion,
                           objetivo.Rama,
                           seleccion.FechaSeleccion,
                           seleccion.Validado
@@ -124,7 +129,7 @@ namespace BackendScout.Services
         {
             return await _context.ObjetivosSeleccionados
                 .Where(os => os.UsuarioId == usuarioId && !os.Validado)
-                .Include(os => os.ObjetivoEducativo) // ✅ CORREGIDO AQUÍ
+                .Include(os => os.ObjetivoEducativo)
                 .ToListAsync();
         }
 
@@ -162,5 +167,34 @@ namespace BackendScout.Services
                 .Where(o => o.UsuarioId == usuarioId && !o.Validado)
                 .ToListAsync();
         }
+        public async Task<List<object>> ObtenerResumenPorScout(Guid usuarioId)
+        {
+    var objetivos = await _context.ObjetivosSeleccionados
+        .Where(o => o.UsuarioId == usuarioId)
+        .Include(o => o.ObjetivoEducativo)
+        .ToListAsync();
+
+    var resumen = objetivos
+        .Where(o => o.ObjetivoEducativo != null)
+        .GroupBy(o => new
+        {
+            Area = o.ObjetivoEducativo.Area,
+            Nivel = o.ObjetivoEducativo.NivelProgresion
+        })
+        .Select(g => new
+        {
+            areaCrecimiento = g.Key.Area,
+            nivelProgresion = g.Key.Nivel,
+            total = g.Count(),
+            validados = g.Count(o => o.Validado),
+            pendientes = g.Count(o => !o.Validado)
+        })
+        .OrderBy(r => r.nivelProgresion)
+        .ThenBy(r => r.areaCrecimiento)
+        .ToList();
+
+    return resumen.Cast<object>().ToList();
+    }
+
     }
 }

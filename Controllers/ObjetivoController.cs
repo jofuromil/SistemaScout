@@ -3,6 +3,8 @@ using BackendScout.Models;
 using BackendScout.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackendScout.Controllers
 {
@@ -13,33 +15,38 @@ namespace BackendScout.Controllers
         private readonly ObjetivoService _service;
         private readonly AppDbContext _context;
         private readonly CargaObjetivosService _cargaService;
-        private readonly PdfObjetivosService _pdfService; // ✅ NUEVO
+        private readonly PdfObjetivosService _pdfService;
 
         public ObjetivoController(
             ObjetivoService service,
             AppDbContext context,
             CargaObjetivosService cargaService,
-            PdfObjetivosService pdfService) // ✅ NUEVO
+            PdfObjetivosService pdfService)
         {
             _service = service;
             _context = context;
             _cargaService = cargaService;
-            _pdfService = pdfService; // ✅ NUEVO
+            _pdfService = pdfService;
         }
 
         [HttpGet("listar")]
-        public async Task<IActionResult> ListarPorRamaEdad([FromQuery] string rama, [FromQuery] int edad)
+        public async Task<IActionResult> ListarPorRamaYNivel([FromQuery] string rama, [FromQuery] string? nivelProgresion)
         {
-            var objetivos = await _service.ObtenerPorRamaYEdad(rama, edad);
+            var objetivos = await _service.ObtenerPorRamaYNivel(rama, nivelProgresion);
             return Ok(objetivos);
         }
 
         [HttpPost("seleccionar")]
-        public async Task<IActionResult> SeleccionarObjetivo([FromBody] ObjetivoSeleccionado seleccion)
+        [Authorize(Roles = "Scout")]
+        public async Task<IActionResult> SeleccionarObjetivo([FromBody] SeleccionObjetivoDto dto)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+                return Unauthorized();
+
             try
             {
-                var resultado = await _service.SeleccionarObjetivo(seleccion.UsuarioId, seleccion.ObjetivoEducativoId);
+                var resultado = await _service.SeleccionarObjetivo(Guid.Parse(userId), dto.ObjetivoEducativoId);
                 return Ok(resultado);
             }
             catch (Exception ex)
@@ -63,8 +70,32 @@ namespace BackendScout.Controllers
         }
 
         [HttpGet("historial")]
+        [Authorize]
         public async Task<IActionResult> Historial([FromQuery] Guid usuarioId, [FromQuery] bool? soloValidados)
         {
+            var solicitanteId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (solicitanteId == null) return Unauthorized();
+
+            var solicitante = await _context.Users
+                .Include(u => u.Unidad)
+                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(solicitanteId));
+
+            if (solicitante == null)
+                return Unauthorized();
+
+            if (solicitante.Id != usuarioId && solicitante.Tipo == "Scout")
+                return Forbid();
+
+            if (solicitante.Id != usuarioId && solicitante.Tipo == "Dirigente")
+            {
+                var scout = await _context.Users
+                    .Include(u => u.Unidad)
+                    .FirstOrDefaultAsync(u => u.Id == usuarioId);
+
+                if (scout == null || scout.UnidadId != solicitante.UnidadId)
+                    return Forbid();
+            }
+
             try
             {
                 var historial = await _service.HistorialDeObjetivos(usuarioId, soloValidados);
@@ -135,10 +166,61 @@ namespace BackendScout.Controllers
             }
         }
 
-        [HttpGet("pendientes-scout")]
+        [HttpGet("pendientes-por-unidad")]
         [Authorize(Roles = "Dirigente")]
+        public async Task<IActionResult> ObtenerPendientesPorUnidad()
+        {
+            var dirigenteId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(dirigenteId)) return Unauthorized();
+
+            var dirigente = await _context.Users
+                .Include(u => u.Unidad)
+                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(dirigenteId));
+
+            if (dirigente?.Unidad == null)
+                return BadRequest("El dirigente no está asignado a ninguna unidad.");
+
+            var scoutsIds = await _context.Users
+                .Where(u => u.UnidadId == dirigente.Unidad.Id && u.Tipo == "Scout")
+                .Select(u => u.Id)
+                .ToListAsync();
+
+            var pendientes = await _context.ObjetivosSeleccionados
+                .Where(o => scoutsIds.Contains(o.UsuarioId) && o.Validado == false)
+                .Include(o => o.ObjetivoEducativo)
+                .Include(o => o.Usuario)
+                .ToListAsync();
+
+            return Ok(pendientes);
+        }
+
+        [HttpGet("pendientes-scout")]
+        [Authorize]
         public async Task<IActionResult> PendientesScout([FromQuery] Guid usuarioId)
         {
+            var solicitanteId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (solicitanteId == null) return Unauthorized();
+
+            var solicitante = await _context.Users
+                .Include(u => u.Unidad)
+                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(solicitanteId));
+
+            if (solicitante == null)
+                return Unauthorized();
+
+            if (solicitante.Id != usuarioId && solicitante.Tipo == "Scout")
+                return Forbid();
+
+            if (solicitante.Id != usuarioId && solicitante.Tipo == "Dirigente")
+            {
+                var scout = await _context.Users
+                    .Include(u => u.Unidad)
+                    .FirstOrDefaultAsync(u => u.Id == usuarioId);
+
+                if (scout == null || scout.UnidadId != solicitante.UnidadId)
+                    return Forbid();
+            }
+
             try
             {
                 var pendientes = await _service.ObtenerPendientesPorScout(usuarioId);
@@ -164,5 +246,48 @@ namespace BackendScout.Controllers
                 return BadRequest(new { mensaje = ex.Message });
             }
         }
+
+        [HttpGet("resumen-scout")]
+        [Authorize]
+        public async Task<IActionResult> ResumenPorScout([FromQuery] Guid usuarioId)
+        {
+            var solicitanteId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (solicitanteId == null) return Unauthorized();
+
+            var solicitante = await _context.Users
+                .Include(u => u.Unidad)
+                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(solicitanteId));
+
+            if (solicitante == null)
+                return Unauthorized();
+
+            if (solicitante.Id != usuarioId && solicitante.Tipo == "Scout")
+                return Forbid();
+
+            if (solicitante.Id != usuarioId && solicitante.Tipo == "Dirigente")
+            {
+                var scout = await _context.Users
+                    .Include(u => u.Unidad)
+                    .FirstOrDefaultAsync(u => u.Id == usuarioId);
+
+                if (scout == null || scout.UnidadId != solicitante.UnidadId)
+                    return Forbid();
+            }
+
+            try
+            {
+                var resumen = await _service.ObtenerResumenPorScout(usuarioId);
+                return Ok(resumen);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+        }
+    }
+
+    public class SeleccionObjetivoDto
+    {
+        public Guid ObjetivoEducativoId { get; set; }
     }
 }

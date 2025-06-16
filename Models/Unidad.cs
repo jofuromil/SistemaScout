@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace BackendScout.Models
 {
     public class Unidad
@@ -8,7 +11,9 @@ namespace BackendScout.Models
         public string GrupoScout { get; set; } = string.Empty;
         public string Distrito { get; set; } = string.Empty;
         public string CodigoUnidad { get; set; } = Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
-        public Guid DirigenteId { get; set; }  // Quién creó la unidad
+        public Guid DirigenteId { get; set; }
 
+        // ✅ Relación con eventos organizados por esta unidad (opcional pero útil)
+        public ICollection<Evento> EventosOrganizados { get; set; }
     }
 }
